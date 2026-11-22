@@ -1,0 +1,66 @@
+:root {
+  /* Tier 1: Raw Palette — Pale Sage, Ivory, and Muted Forest Sage */
+  --ivory-50: #f8f5ea;
+  --ivory-100: #efeadb;
+  --ivory-200: #e3ddc8;
+
+  --pale-sage-200: #dbe4d0;
+  --pale-sage-300: #c3d1b5;
+  --pale-sage-400: #a9bd9a;
+
+  --forest-sage-500: #6b8a6e;
+  --forest-sage-600: #557259;
+  --forest-sage-700: #3f5744;
+  --forest-sage-800: #2c3e31;
+  --forest-sage-900: #1f2c23;
+
+  /* Tier 2: Semantic Roles */
+  --background: var(--ivory-50);
+  --foreground: var(--forest-sage-900);
+  --foreground-muted: rgba(31, 44, 35, 0.55);
+
+  --accent: var(--forest-sage-500);
+  --accent-hover: var(--forest-sage-600);
+  --accent-muted: rgba(107, 138, 110, 0.25);
+
+  --surface-dark: var(--forest-sage-800);
+  --surface-black: var(--forest-sage-900);
+  --surface-muted: var(--ivory-100);
+  --surface-soft: var(--pale-sage-200);
+  --border-muted: var(--pale-sage-300);
+
+  --foreground-on-dark: var(--ivory-50);
+  --foreground-on-dark-muted: var(--pale-sage-300);
+
+  /* Glassmorphism & Radial Depth */
+  --glass-bg: rgba(248, 245, 234, 0.08);
+  --glass-border: rgba(195, 209, 181, 0.25);
+  --bg-radial-inner: #3f5744;
+  --bg-radial-mid: #2c3e31;
+  --bg-radial-outer: #1f2c23;
+
+  /* Tier 3: Visualisation, Cursor & WebGL Usage */
+  --map-dot: var(--pale-sage-400);
+  --map-grid: rgba(195, 209, 181, 0.40);
+  --timeline-outline: var(--forest-sage-700);
+  --timeline-fill: rgba(248, 245, 234, 0.10);
+
+  --glow-on-dark: var(--pale-sage-200);
+  --glow-on-light: var(--forest-sage-500);
+  --cursor-core: var(--ivory-50);
+  --cursor-ring: rgba(219, 228, 208, 0.6);
+  --cursor-ring-light: rgba(107, 138, 110, 0.6);
+
+  /* Node Lightness & Glow Hierarchy */
+  --node-file: #f8f5ea;
+  --node-class: #dbe4d0;
+  --node-function: #a9bd9a;
+  --node-module: #6b8a6e;
+  --node-import: #557259;
+  --impact-upstream: #ffffff;
+  --impact-downstream: #dbe4d0;
+
+  /* Typography */
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+}

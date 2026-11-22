@@ -1,0 +1,1159 @@
+{
+  "repo_id": "mock__repolens_core",
+  "nodes": [
+    {
+      "id": "module:ingest",
+      "label": "ingest",
+      "type": "Module",
+      "path": "backend/app/ingest",
+      "start_line": 1,
+      "end_line": 1,
+      "summary": "Package directory clustering ingest components.",
+      "community": 0,
+      "x": 0.5976,
+      "y": 0.1675,
+      "z": 0.3425
+    },
+    {
+      "id": "module:codegraph",
+      "label": "codegraph",
+      "type": "Module",
+      "path": "backend/app/codegraph",
+      "start_line": 1,
+      "end_line": 1,
+      "summary": "Package directory clustering codegraph components.",
+      "community": 1,
+      "x": 0.3062,
+      "y": 0.6655,
+      "z": 0.6237
+    },
+    {
+      "id": "module:rag",
+      "label": "rag",
+      "type": "Module",
+      "path": "backend/app/rag",
+      "start_line": 1,
+      "end_line": 1,
+      "summary": "Package directory clustering rag components.",
+      "community": 2,
+      "x": 0.7745,
+      "y": 0.2109,
+      "z": 0.4453
+    },
+    {
+      "id": "module:agents",
+      "label": "agents",
+      "type": "Module",
+      "path": "backend/app/agents",
+      "start_line": 1,
+      "end_line": 1,
+      "summary": "Package directory clustering agents components.",
+      "community": 3,
+      "x": 0.1709,
+      "y": 0.303,
+      "z": 0.5037
+    },
+    {
+      "id": "module:guardrails",
+      "label": "guardrails",
+      "type": "Module",
+      "path": "backend/app/guardrails",
+      "start_line": 1,
+      "end_line": 1,
+      "summary": "Package directory clustering guardrails components.",
+      "community": 4,
+      "x": 0.1686,
+      "y": 0.2892,
+      "z": 0.6049
+    },
+    {
+      "id": "file:ingest/clone.py",
+      "label": "clone.py",
+      "type": "File",
+      "path": "backend/app/ingest/clone.py",
+      "start_line": 1,
+      "end_line": 179,
+      "summary": "Module clone.py implementing ingest logic.",
+      "community": 0,
+      "x": 0.4356,
+      "y": 0.4594,
+      "z": 0.3226
+    },
+    {
+      "id": "file:ingest/scan.py",
+      "label": "scan.py",
+      "type": "File",
+      "path": "backend/app/ingest/scan.py",
+      "start_line": 1,
+      "end_line": 41,
+      "summary": "Module scan.py implementing ingest logic.",
+      "community": 0,
+      "x": 0.707,
+      "y": 0.2277,
+      "z": 0.4381
+    },
+    {
+      "id": "file:ingest/parse.py",
+      "label": "parse.py",
+      "type": "File",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 1,
+      "end_line": 111,
+      "summary": "Module parse.py implementing ingest logic.",
+      "community": 0,
+      "x": 0.2244,
+      "y": 0.8658,
+      "z": 0.3693
+    },
+    {
+      "id": "file:codegraph/builder.py",
+      "label": "builder.py",
+      "type": "File",
+      "path": "backend/app/codegraph/builder.py",
+      "start_line": 1,
+      "end_line": 63,
+      "summary": "Module builder.py implementing codegraph logic.",
+      "community": 1,
+      "x": 0.4039,
+      "y": 0.3872,
+      "z": 0.3752
+    },
+    {
+      "id": "file:codegraph/communities.py",
+      "label": "communities.py",
+      "type": "File",
+      "path": "backend/app/codegraph/communities.py",
+      "start_line": 1,
+      "end_line": 107,
+      "summary": "Module communities.py implementing codegraph logic.",
+      "community": 1,
+      "x": 0.7457,
+      "y": 0.6838,
+      "z": 0.529
+    },
+    {
+      "id": "file:codegraph/impact.py",
+      "label": "impact.py",
+      "type": "File",
+      "path": "backend/app/codegraph/impact.py",
+      "start_line": 1,
+      "end_line": 136,
+      "summary": "Module impact.py implementing codegraph logic.",
+      "community": 1,
+      "x": 0.163,
+      "y": 0.3345,
+      "z": 0.6029
+    },
+    {
+      "id": "file:rag/embed.py",
+      "label": "embed.py",
+      "type": "File",
+      "path": "backend/app/rag/embed.py",
+      "start_line": 1,
+      "end_line": 132,
+      "summary": "Module embed.py implementing rag logic.",
+      "community": 2,
+      "x": 0.5619,
+      "y": 0.6637,
+      "z": 0.1367
+    },
+    {
+      "id": "file:rag/retriever.py",
+      "label": "retriever.py",
+      "type": "File",
+      "path": "backend/app/rag/retriever.py",
+      "start_line": 1,
+      "end_line": 98,
+      "summary": "Module retriever.py implementing rag logic.",
+      "community": 2,
+      "x": 0.7185,
+      "y": 0.8882,
+      "z": 0.7843
+    },
+    {
+      "id": "file:agents/planner.py",
+      "label": "planner.py",
+      "type": "File",
+      "path": "backend/app/agents/planner.py",
+      "start_line": 1,
+      "end_line": 65,
+      "summary": "Module planner.py implementing agents logic.",
+      "community": 3,
+      "x": 0.4041,
+      "y": 0.4627,
+      "z": 0.7673
+    },
+    {
+      "id": "file:agents/critic.py",
+      "label": "critic.py",
+      "type": "File",
+      "path": "backend/app/agents/critic.py",
+      "start_line": 1,
+      "end_line": 81,
+      "summary": "Module critic.py implementing agents logic.",
+      "community": 3,
+      "x": 0.3961,
+      "y": 0.2676,
+      "z": 0.3136
+    },
+    {
+      "id": "file:agents/graph.py",
+      "label": "graph.py",
+      "type": "File",
+      "path": "backend/app/agents/graph.py",
+      "start_line": 1,
+      "end_line": 58,
+      "summary": "Module graph.py implementing agents logic.",
+      "community": 3,
+      "x": 0.5873,
+      "y": 0.2369,
+      "z": 0.6833
+    },
+    {
+      "id": "file:guardrails/input.py",
+      "label": "input.py",
+      "type": "File",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 1,
+      "end_line": 81,
+      "summary": "Module input.py implementing guardrails logic.",
+      "community": 4,
+      "x": 0.4698,
+      "y": 0.316,
+      "z": 0.8403
+    },
+    {
+      "id": "file:guardrails/secrets.py",
+      "label": "secrets.py",
+      "type": "File",
+      "path": "backend/app/guardrails/secrets.py",
+      "start_line": 1,
+      "end_line": 96,
+      "summary": "Module secrets.py implementing guardrails logic.",
+      "community": 4,
+      "x": 0.6477,
+      "y": 0.7743,
+      "z": 0.7208
+    },
+    {
+      "id": "file:guardrails/repo.py",
+      "label": "repo.py",
+      "type": "File",
+      "path": "backend/app/guardrails/repo.py",
+      "start_line": 1,
+      "end_line": 98,
+      "summary": "Module repo.py implementing guardrails logic.",
+      "community": 4,
+      "x": 0.7574,
+      "y": 0.744,
+      "z": 0.4209
+    },
+    {
+      "id": "function:ingest/clone.py:clone_repository",
+      "label": "clone_repository",
+      "type": "Function",
+      "path": "backend/app/ingest/clone.py",
+      "start_line": 14,
+      "end_line": 82,
+      "summary": "Function clone_repository providing core ingest functionality.",
+      "community": 0,
+      "x": 0.8718,
+      "y": 0.5605,
+      "z": 0.6961
+    },
+    {
+      "id": "function:guardrails/repo.py:validate_github_url",
+      "label": "validate_github_url",
+      "type": "Function",
+      "path": "backend/app/guardrails/repo.py",
+      "start_line": 23,
+      "end_line": 118,
+      "summary": "Function validate_github_url providing core guardrails functionality.",
+      "community": 4,
+      "x": 0.4061,
+      "y": 0.8731,
+      "z": 0.463
+    },
+    {
+      "id": "function:ingest/scan.py:scan_repository",
+      "label": "scan_repository",
+      "type": "Function",
+      "path": "backend/app/ingest/scan.py",
+      "start_line": 26,
+      "end_line": 72,
+      "summary": "Function scan_repository providing core ingest functionality.",
+      "community": 0,
+      "x": 0.272,
+      "y": 0.5552,
+      "z": 0.2865
+    },
+    {
+      "id": "function:ingest/parse.py:parse_file_ast",
+      "label": "parse_file_ast",
+      "type": "Function",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 47,
+      "end_line": 109,
+      "summary": "Function parse_file_ast providing core ingest functionality.",
+      "community": 0,
+      "x": 0.858,
+      "y": 0.4095,
+      "z": 0.2474
+    },
+    {
+      "id": "class:ingest/parse.py:ASTParser",
+      "label": "ASTParser",
+      "type": "Class",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 18,
+      "end_line": 120,
+      "summary": "Class ASTParser providing core ingest functionality.",
+      "community": 0,
+      "x": 0.4942,
+      "y": 0.7302,
+      "z": 0.825
+    },
+    {
+      "id": "function:codegraph/builder.py:build_code_graph",
+      "label": "build_code_graph",
+      "type": "Function",
+      "path": "backend/app/codegraph/builder.py",
+      "start_line": 19,
+      "end_line": 75,
+      "summary": "Function build_code_graph providing core codegraph functionality.",
+      "community": 1,
+      "x": 0.7629,
+      "y": 0.4299,
+      "z": 0.1072
+    },
+    {
+      "id": "function:codegraph/communities.py:detect_communities",
+      "label": "detect_communities",
+      "type": "Function",
+      "path": "backend/app/codegraph/communities.py",
+      "start_line": 34,
+      "end_line": 114,
+      "summary": "Function detect_communities providing core codegraph functionality.",
+      "community": 1,
+      "x": 0.5262,
+      "y": 0.924,
+      "z": 0.8247
+    },
+    {
+      "id": "function:codegraph/impact.py:analyze_impact",
+      "label": "analyze_impact",
+      "type": "Function",
+      "path": "backend/app/codegraph/impact.py",
+      "start_line": 10,
+      "end_line": 69,
+      "summary": "Function analyze_impact providing core codegraph functionality.",
+      "community": 1,
+      "x": 0.6635,
+      "y": 0.5333,
+      "z": 0.2901
+    },
+    {
+      "id": "class:codegraph/impact.py:ImpactTracker",
+      "label": "ImpactTracker",
+      "type": "Class",
+      "path": "backend/app/codegraph/impact.py",
+      "start_line": 31,
+      "end_line": 69,
+      "summary": "Class ImpactTracker providing core codegraph functionality.",
+      "community": 1,
+      "x": 0.3142,
+      "y": 0.1923,
+      "z": 0.0529
+    },
+    {
+      "id": "function:rag/embed.py:embed_code_graph",
+      "label": "embed_code_graph",
+      "type": "Function",
+      "path": "backend/app/rag/embed.py",
+      "start_line": 26,
+      "end_line": 119,
+      "summary": "Function embed_code_graph providing core rag functionality.",
+      "community": 2,
+      "x": 0.7358,
+      "y": 0.5069,
+      "z": 0.1458
+    },
+    {
+      "id": "class:rag/embed.py:VectorIndex",
+      "label": "VectorIndex",
+      "type": "Class",
+      "path": "backend/app/rag/embed.py",
+      "start_line": 50,
+      "end_line": 93,
+      "summary": "Class VectorIndex providing core rag functionality.",
+      "community": 2,
+      "x": 0.8075,
+      "y": 0.5069,
+      "z": 0.229
+    },
+    {
+      "id": "function:rag/retriever.py:retrieve_code",
+      "label": "retrieve_code",
+      "type": "Function",
+      "path": "backend/app/rag/retriever.py",
+      "start_line": 33,
+      "end_line": 75,
+      "summary": "Function retrieve_code providing core rag functionality.",
+      "community": 2,
+      "x": 0.5354,
+      "y": 0.7508,
+      "z": 0.5273
+    },
+    {
+      "id": "function:agents/planner.py:planner_node",
+      "label": "planner_node",
+      "type": "Function",
+      "path": "backend/app/agents/planner.py",
+      "start_line": 10,
+      "end_line": 96,
+      "summary": "Function planner_node providing core agents functionality.",
+      "community": 3,
+      "x": 0.4897,
+      "y": 0.1507,
+      "z": 0.3767
+    },
+    {
+      "id": "class:agents/planner.py:PlannerAgent",
+      "label": "PlannerAgent",
+      "type": "Class",
+      "path": "backend/app/agents/planner.py",
+      "start_line": 29,
+      "end_line": 85,
+      "summary": "Class PlannerAgent providing core agents functionality.",
+      "community": 3,
+      "x": 0.1021,
+      "y": 0.8402,
+      "z": 0.9023
+    },
+    {
+      "id": "function:agents/critic.py:critic_node",
+      "label": "critic_node",
+      "type": "Function",
+      "path": "backend/app/agents/critic.py",
+      "start_line": 15,
+      "end_line": 117,
+      "summary": "Function critic_node providing core agents functionality.",
+      "community": 3,
+      "x": 0.7844,
+      "y": 0.9302,
+      "z": 0.5294
+    },
+    {
+      "id": "class:agents/critic.py:CriticVerifier",
+      "label": "CriticVerifier",
+      "type": "Class",
+      "path": "backend/app/agents/critic.py",
+      "start_line": 18,
+      "end_line": 71,
+      "summary": "Class CriticVerifier providing core agents functionality.",
+      "community": 3,
+      "x": 0.6438,
+      "y": 0.9022,
+      "z": 0.1986
+    },
+    {
+      "id": "function:agents/graph.py:create_workflow",
+      "label": "create_workflow",
+      "type": "Function",
+      "path": "backend/app/agents/graph.py",
+      "start_line": 43,
+      "end_line": 109,
+      "summary": "Function create_workflow providing core agents functionality.",
+      "community": 3,
+      "x": 0.9179,
+      "y": 0.886,
+      "z": 0.7297
+    },
+    {
+      "id": "function:guardrails/input.py:check_input_guardrail",
+      "label": "check_input_guardrail",
+      "type": "Function",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 22,
+      "end_line": 94,
+      "summary": "Function check_input_guardrail providing core guardrails functionality.",
+      "community": 4,
+      "x": 0.4091,
+      "y": 0.6545,
+      "z": 0.3861
+    },
+    {
+      "id": "function:guardrails/secrets.py:detect_secrets",
+      "label": "detect_secrets",
+      "type": "Function",
+      "path": "backend/app/guardrails/secrets.py",
+      "start_line": 43,
+      "end_line": 112,
+      "summary": "Function detect_secrets providing core guardrails functionality.",
+      "community": 4,
+      "x": 0.1589,
+      "y": 0.2522,
+      "z": 0.3543
+    },
+    {
+      "id": "function:guardrails/secrets.py:redact_secrets",
+      "label": "redact_secrets",
+      "type": "Function",
+      "path": "backend/app/guardrails/secrets.py",
+      "start_line": 47,
+      "end_line": 84,
+      "summary": "Function redact_secrets providing core guardrails functionality.",
+      "community": 4,
+      "x": 0.5796,
+      "y": 0.0565,
+      "z": 0.6871
+    },
+    {
+      "id": "function:guardrails/repo.py:is_safe_repo_path",
+      "label": "is_safe_repo_path",
+      "type": "Function",
+      "path": "backend/app/guardrails/repo.py",
+      "start_line": 13,
+      "end_line": 84,
+      "summary": "Function is_safe_repo_path providing core guardrails functionality.",
+      "community": 4,
+      "x": 0.1107,
+      "y": 0.0783,
+      "z": 0.3474
+    },
+    {
+      "id": "function:ingest/parse.py:walk_python_ast",
+      "label": "walk_python_ast",
+      "type": "Function",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 47,
+      "end_line": 95,
+      "summary": "Function walk_python_ast support component.",
+      "community": 0,
+      "x": 0.3006,
+      "y": 0.4869,
+      "z": 0.5353
+    },
+    {
+      "id": "function:ingest/parse.py:walk_js_ast",
+      "label": "walk_js_ast",
+      "type": "Function",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 51,
+      "end_line": 138,
+      "summary": "Function walk_js_ast support component.",
+      "community": 0,
+      "x": 0.4754,
+      "y": 0.7562,
+      "z": 0.7767
+    },
+    {
+      "id": "import:ingest/parse.py:tree_sitter_py",
+      "label": "tree_sitter_py",
+      "type": "Import",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 27,
+      "end_line": 77,
+      "summary": "Import tree_sitter_py support component.",
+      "community": 0,
+      "x": 0.1372,
+      "y": 0.4379,
+      "z": 0.4312
+    },
+    {
+      "id": "import:ingest/parse.py:tree_sitter_js",
+      "label": "tree_sitter_js",
+      "type": "Import",
+      "path": "backend/app/ingest/parse.py",
+      "start_line": 44,
+      "end_line": 71,
+      "summary": "Import tree_sitter_js support component.",
+      "community": 0,
+      "x": 0.656,
+      "y": 0.9357,
+      "z": 0.1386
+    },
+    {
+      "id": "function:codegraph/builder.py:spring_layout_3d",
+      "label": "spring_layout_3d",
+      "type": "Function",
+      "path": "backend/app/codegraph/builder.py",
+      "start_line": 40,
+      "end_line": 108,
+      "summary": "Function spring_layout_3d support component.",
+      "community": 1,
+      "x": 0.7705,
+      "y": 0.1483,
+      "z": 0.2224
+    },
+    {
+      "id": "function:codegraph/communities.py:louvain_partition",
+      "label": "louvain_partition",
+      "type": "Function",
+      "path": "backend/app/codegraph/communities.py",
+      "start_line": 49,
+      "end_line": 122,
+      "summary": "Function louvain_partition support component.",
+      "community": 1,
+      "x": 0.1762,
+      "y": 0.2151,
+      "z": 0.4664
+    },
+    {
+      "id": "function:codegraph/impact.py:ego_graph_extract",
+      "label": "ego_graph_extract",
+      "type": "Function",
+      "path": "backend/app/codegraph/impact.py",
+      "start_line": 19,
+      "end_line": 121,
+      "summary": "Function ego_graph_extract support component.",
+      "community": 1,
+      "x": 0.7772,
+      "y": 0.8204,
+      "z": 0.1381
+    },
+    {
+      "id": "import:codegraph/builder.py:nx_digraph",
+      "label": "nx_digraph",
+      "type": "Import",
+      "path": "backend/app/codegraph/builder.py",
+      "start_line": 56,
+      "end_line": 134,
+      "summary": "Import nx_digraph support component.",
+      "community": 1,
+      "x": 0.8024,
+      "y": 0.9221,
+      "z": 0.8837
+    },
+    {
+      "id": "import:rag/embed.py:chroma_client",
+      "label": "chroma_client",
+      "type": "Import",
+      "path": "backend/app/rag/embed.py",
+      "start_line": 30,
+      "end_line": 86,
+      "summary": "Import chroma_client support component.",
+      "community": 2,
+      "x": 0.4158,
+      "y": 0.4832,
+      "z": 0.8282
+    },
+    {
+      "id": "function:rag/embed.py:gemini_embedder",
+      "label": "gemini_embedder",
+      "type": "Function",
+      "path": "backend/app/rag/embed.py",
+      "start_line": 18,
+      "end_line": 86,
+      "summary": "Function gemini_embedder support component.",
+      "community": 2,
+      "x": 0.3911,
+      "y": 0.9368,
+      "z": 0.2887
+    },
+    {
+      "id": "function:rag/retriever.py:similarity_search",
+      "label": "similarity_search",
+      "type": "Function",
+      "path": "backend/app/rag/retriever.py",
+      "start_line": 44,
+      "end_line": 101,
+      "summary": "Function similarity_search support component.",
+      "community": 2,
+      "x": 0.4307,
+      "y": 0.9116,
+      "z": 0.9459
+    },
+    {
+      "id": "function:agents/graph.py:route_planner",
+      "label": "route_planner",
+      "type": "Function",
+      "path": "backend/app/agents/graph.py",
+      "start_line": 50,
+      "end_line": 127,
+      "summary": "Function route_planner support component.",
+      "community": 3,
+      "x": 0.1893,
+      "y": 0.317,
+      "z": 0.9218
+    },
+    {
+      "id": "import:agents/graph.py:StateGraph",
+      "label": "StateGraph",
+      "type": "Import",
+      "path": "backend/app/agents/graph.py",
+      "start_line": 52,
+      "end_line": 134,
+      "summary": "Import StateGraph support component.",
+      "community": 3,
+      "x": 0.1049,
+      "y": 0.3322,
+      "z": 0.0951
+    },
+    {
+      "id": "function:agents/critic.py:extract_citations",
+      "label": "extract_citations",
+      "type": "Function",
+      "path": "backend/app/agents/critic.py",
+      "start_line": 45,
+      "end_line": 129,
+      "summary": "Function extract_citations support component.",
+      "community": 3,
+      "x": 0.8774,
+      "y": 0.528,
+      "z": 0.1012
+    },
+    {
+      "id": "function:agents/critic.py:rewrite_missing_citations",
+      "label": "rewrite_missing_citations",
+      "type": "Function",
+      "path": "backend/app/agents/critic.py",
+      "start_line": 47,
+      "end_line": 75,
+      "summary": "Function rewrite_missing_citations support component.",
+      "community": 3,
+      "x": 0.8162,
+      "y": 0.1117,
+      "z": 0.1112
+    },
+    {
+      "id": "import:guardrails/input.py:injection_regex",
+      "label": "injection_regex",
+      "type": "Import",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 30,
+      "end_line": 116,
+      "summary": "Import injection_regex support component.",
+      "community": 4,
+      "x": 0.1579,
+      "y": 0.8513,
+      "z": 0.2716
+    },
+    {
+      "id": "import:guardrails/secrets.py:secret_patterns",
+      "label": "secret_patterns",
+      "type": "Import",
+      "path": "backend/app/guardrails/secrets.py",
+      "start_line": 53,
+      "end_line": 70,
+      "summary": "Import secret_patterns support component.",
+      "community": 4,
+      "x": 0.6074,
+      "y": 0.4273,
+      "z": 0.5753
+    },
+    {
+      "id": "function:guardrails/input.py:sanitize_web_content",
+      "label": "sanitize_web_content",
+      "type": "Function",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 48,
+      "end_line": 105,
+      "summary": "Function sanitize_web_content support component.",
+      "community": 4,
+      "x": 0.8912,
+      "y": 0.2338,
+      "z": 0.6946
+    },
+    {
+      "id": "class:guardrails/input.py:ExecutionBudget",
+      "label": "ExecutionBudget",
+      "type": "Class",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 30,
+      "end_line": 98,
+      "summary": "Class ExecutionBudget support component.",
+      "community": 4,
+      "x": 0.4062,
+      "y": 0.6545,
+      "z": 0.32
+    },
+    {
+      "id": "function:guardrails/input.py:is_budget_exceeded",
+      "label": "is_budget_exceeded",
+      "type": "Function",
+      "path": "backend/app/guardrails/input.py",
+      "start_line": 35,
+      "end_line": 74,
+      "summary": "Function is_budget_exceeded support component.",
+      "community": 4,
+      "x": 0.0584,
+      "y": 0.609,
+      "z": 0.5567
+    }
+  ],
+  "edges": [
+    {
+      "source": "module:ingest",
+      "target": "file:ingest/clone.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:ingest",
+      "target": "file:ingest/scan.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:ingest",
+      "target": "file:ingest/parse.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:codegraph",
+      "target": "file:codegraph/builder.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:codegraph",
+      "target": "file:codegraph/communities.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:codegraph",
+      "target": "file:codegraph/impact.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:rag",
+      "target": "file:rag/embed.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:rag",
+      "target": "file:rag/retriever.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:agents",
+      "target": "file:agents/planner.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:agents",
+      "target": "file:agents/critic.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:agents",
+      "target": "file:agents/graph.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:guardrails",
+      "target": "file:guardrails/input.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:guardrails",
+      "target": "file:guardrails/secrets.py",
+      "relation": "contains"
+    },
+    {
+      "source": "module:guardrails",
+      "target": "file:guardrails/repo.py",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/clone.py",
+      "target": "function:ingest/clone.py:clone_repository",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/repo.py",
+      "target": "function:guardrails/repo.py:validate_github_url",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/scan.py",
+      "target": "function:ingest/scan.py:scan_repository",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "function:ingest/parse.py:parse_file_ast",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "class:ingest/parse.py:ASTParser",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/builder.py",
+      "target": "function:codegraph/builder.py:build_code_graph",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/communities.py",
+      "target": "function:codegraph/communities.py:detect_communities",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/impact.py",
+      "target": "function:codegraph/impact.py:analyze_impact",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/impact.py",
+      "target": "class:codegraph/impact.py:ImpactTracker",
+      "relation": "contains"
+    },
+    {
+      "source": "file:rag/embed.py",
+      "target": "function:rag/embed.py:embed_code_graph",
+      "relation": "contains"
+    },
+    {
+      "source": "file:rag/embed.py",
+      "target": "class:rag/embed.py:VectorIndex",
+      "relation": "contains"
+    },
+    {
+      "source": "file:rag/retriever.py",
+      "target": "function:rag/retriever.py:retrieve_code",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/planner.py",
+      "target": "function:agents/planner.py:planner_node",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/planner.py",
+      "target": "class:agents/planner.py:PlannerAgent",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/critic.py",
+      "target": "function:agents/critic.py:critic_node",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/critic.py",
+      "target": "class:agents/critic.py:CriticVerifier",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/graph.py",
+      "target": "function:agents/graph.py:create_workflow",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/input.py",
+      "target": "function:guardrails/input.py:check_input_guardrail",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/secrets.py",
+      "target": "function:guardrails/secrets.py:detect_secrets",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/secrets.py",
+      "target": "function:guardrails/secrets.py:redact_secrets",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/repo.py",
+      "target": "function:guardrails/repo.py:is_safe_repo_path",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "function:ingest/parse.py:walk_python_ast",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "function:ingest/parse.py:walk_js_ast",
+      "relation": "contains"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "import:ingest/parse.py:tree_sitter_py",
+      "relation": "imports"
+    },
+    {
+      "source": "file:ingest/parse.py",
+      "target": "import:ingest/parse.py:tree_sitter_js",
+      "relation": "imports"
+    },
+    {
+      "source": "file:codegraph/builder.py",
+      "target": "function:codegraph/builder.py:spring_layout_3d",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/communities.py",
+      "target": "function:codegraph/communities.py:louvain_partition",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/impact.py",
+      "target": "function:codegraph/impact.py:ego_graph_extract",
+      "relation": "contains"
+    },
+    {
+      "source": "file:codegraph/builder.py",
+      "target": "import:codegraph/builder.py:nx_digraph",
+      "relation": "imports"
+    },
+    {
+      "source": "file:rag/embed.py",
+      "target": "import:rag/embed.py:chroma_client",
+      "relation": "imports"
+    },
+    {
+      "source": "file:rag/embed.py",
+      "target": "function:rag/embed.py:gemini_embedder",
+      "relation": "contains"
+    },
+    {
+      "source": "file:rag/retriever.py",
+      "target": "function:rag/retriever.py:similarity_search",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/graph.py",
+      "target": "function:agents/graph.py:route_planner",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/graph.py",
+      "target": "import:agents/graph.py:StateGraph",
+      "relation": "imports"
+    },
+    {
+      "source": "file:agents/critic.py",
+      "target": "function:agents/critic.py:extract_citations",
+      "relation": "contains"
+    },
+    {
+      "source": "file:agents/critic.py",
+      "target": "function:agents/critic.py:rewrite_missing_citations",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/input.py",
+      "target": "import:guardrails/input.py:injection_regex",
+      "relation": "imports"
+    },
+    {
+      "source": "file:guardrails/secrets.py",
+      "target": "import:guardrails/secrets.py:secret_patterns",
+      "relation": "imports"
+    },
+    {
+      "source": "file:guardrails/input.py",
+      "target": "function:guardrails/input.py:sanitize_web_content",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/input.py",
+      "target": "class:guardrails/input.py:ExecutionBudget",
+      "relation": "contains"
+    },
+    {
+      "source": "file:guardrails/input.py",
+      "target": "function:guardrails/input.py:is_budget_exceeded",
+      "relation": "contains"
+    },
+    {
+      "source": "func:ingest/clone.py:clone_repository",
+      "target": "func:guardrails/repo.py:validate_github_url",
+      "relation": "calls"
+    },
+    {
+      "source": "func:ingest/scan.py:scan_repository",
+      "target": "func:guardrails/repo.py:is_safe_repo_path",
+      "relation": "calls"
+    },
+    {
+      "source": "func:ingest/parse.py:parse_file_ast",
+      "target": "class:ingest/parse.py:ASTParser",
+      "relation": "calls"
+    },
+    {
+      "source": "func:codegraph/builder.py:build_code_graph",
+      "target": "func:ingest/parse.py:parse_file_ast",
+      "relation": "calls"
+    },
+    {
+      "source": "func:codegraph/communities.py:detect_communities",
+      "target": "func:codegraph/communities.py:louvain_partition",
+      "relation": "calls"
+    },
+    {
+      "source": "func:codegraph/impact.py:analyze_impact",
+      "target": "func:codegraph/impact.py:ego_graph_extract",
+      "relation": "calls"
+    },
+    {
+      "source": "func:rag/embed.py:embed_code_graph",
+      "target": "func:rag/embed.py:gemini_embedder",
+      "relation": "calls"
+    },
+    {
+      "source": "func:rag/retriever.py:retrieve_code",
+      "target": "func:rag/retriever.py:similarity_search",
+      "relation": "calls"
+    },
+    {
+      "source": "func:agents/planner.py:planner_node",
+      "target": "class:agents/planner.py:PlannerAgent",
+      "relation": "calls"
+    },
+    {
+      "source": "func:agents/critic.py:critic_node",
+      "target": "func:agents/critic.py:extract_citations",
+      "relation": "calls"
+    },
+    {
+      "source": "func:agents/graph.py:create_workflow",
+      "target": "func:agents/graph.py:route_planner",
+      "relation": "calls"
+    },
+    {
+      "source": "func:guardrails/input.py:check_input_guardrail",
+      "target": "class:guardrails/input.py:ExecutionBudget",
+      "relation": "calls"
+    },
+    {
+      "source": "func:guardrails/secrets.py:redact_secrets",
+      "target": "func:guardrails/secrets.py:detect_secrets",
+      "relation": "calls"
+    }
+  ],
+  "communities": [
+    {
+      "id": 0,
+      "name": "Core Ingest & AST",
+      "summary": "Repository cloning, shallow scanning and Tree-Sitter AST parsing"
+    },
+    {
+      "id": 1,
+      "name": "Graph Knowledge & Modularity",
+      "summary": "Louvain community partitioning and 3D spring coordinate mapping"
+    },
+    {
+      "id": 2,
+      "name": "Vector Store & Embeddings",
+      "summary": "ChromaDB persistent indexing with Gemini embeddings"
+    },
+    {
+      "id": 3,
+      "name": "Multi-Agent Workflow",
+      "summary": "LangGraph state orchestration, planner, code searcher, and critic"
+    },
+    {
+      "id": 4,
+      "name": "Security Guardrails",
+      "summary": "Injection detection, secret redaction, and path traversal guards"
+    }
+  ],
+  "stats": {
+    "node_count": 60,
+    "edge_count": 68,
+    "community_count": 5
+  }
+}
