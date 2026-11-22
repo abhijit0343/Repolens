@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RepoBar } from '../components/RepoBar.jsx';
 import { NodePanel } from '../components/NodePanel.jsx';
+import { ChatDock } from '../components/ChatDock.jsx';
 import { GraphScene } from '../three/GraphScene.js';
 import { api } from '../lib/api.js';
 
 /**
- * RepoLens — Explorer Section (Part 1)
- * Interactive 3D Graph Exploration viewport hosting RepoBar, Three.js GraphScene,
- * and NodePanel inspector drawer.
+ * RepoLens — Explorer Section (Part 2)
+ * Interactive 3D Graph Exploration viewport hosting RepoBar, 5-stage indexing strip,
+ * Three.js GraphScene, NodePanel inspector, and ChatDock with citations.
  */
 export function Explorer({ onRepoIndexed }) {
   const canvasContainerRef = useRef(null);
@@ -18,6 +19,9 @@ export function Explorer({ onRepoIndexed }) {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [loadingImpact, setLoadingImpact] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'node'
+
+  const indexingStages = ['cloning', 'scanning', 'parsing', 'graphing', 'summarizing'];
 
   // Load Graph Data on Mount or Repo Switch
   useEffect(() => {
@@ -56,7 +60,6 @@ export function Explorer({ onRepoIndexed }) {
     const scene = new GraphScene(canvasContainerRef.current, {
       onNodeHover: (node) => setHoveredNode(node),
       onNodeClick: async (node) => {
-        // Fetch detailed node info if available
         let details = node;
         try {
           const full = await api.getNode(activeRepoId, node.id);
@@ -65,6 +68,7 @@ export function Explorer({ onRepoIndexed }) {
           // Keep node as is
         }
         setSelectedNode(details);
+        setActiveTab('node');
       },
     });
 
@@ -118,35 +122,82 @@ export function Explorer({ onRepoIndexed }) {
       }
     } catch (err) {
       console.warn('[Explorer] Impact calculation error:', err);
-      // Fallback mock impact highlight
       if (sceneRef.current && selectedNode) {
-        sceneRef.current.setHighlightNodes([selectedNode.id], ['app/main.py::lifespan'], ['rag/retriever.py::query_vectorstore']);
+        sceneRef.current.setHighlightNodes(
+          [selectedNode.id],
+          ['app/main.py::lifespan'],
+          ['rag/retriever.py::query_vectorstore']
+        );
       }
     } finally {
       setLoadingImpact(false);
     }
   };
 
-  const handleSelectNodeById = (nodeId) => {
-    if (sceneRef.current) {
-      sceneRef.current.focusOnNode(nodeId);
-      const mesh = sceneRef.current.nodeMeshes.get(nodeId);
-      if (mesh) setSelectedNode(mesh.userData);
+  // Handle Citation Chip Click: focus camera and highlight node
+  const handleCitationClick = (citation) => {
+    if (!sceneRef.current) return;
+    const targetPath = citation.path;
+
+    // Search for matching node by path or label
+    let targetNode = null;
+    sceneRef.current.nodeMeshes.forEach((mesh) => {
+      if (mesh.userData.path === targetPath || mesh.userData.id.includes(targetPath)) {
+        targetNode = mesh.userData;
+      }
+    });
+
+    if (targetNode) {
+      sceneRef.current.focusOnNode(targetNode.id);
+      sceneRef.current.setHighlightNodes([targetNode.id]);
+      setSelectedNode(targetNode);
+      setActiveTab('node');
     }
   };
+
+  const handleHighlightNodes = (nodeIds) => {
+    if (sceneRef.current) {
+      sceneRef.current.setHighlightNodes(nodeIds);
+      if (nodeIds.length > 0) {
+        sceneRef.current.focusOnNode(nodeIds[0]);
+      }
+    }
+  };
+
+  const isIndexing = indexingStages.includes(indexingStatus);
 
   return (
     <section
       id="explorer"
       className="relative min-h-screen w-full flex flex-col bg-[var(--surface-black)] text-[var(--ivory-50)] overflow-hidden"
     >
-      {/* Top Header & RepoBar */}
-      <div className="relative z-20 pt-24 pb-4 px-6 bg-gradient-to-b from-[var(--surface-black)] to-transparent pointer-events-auto">
-        <div className="max-w-7xl mx-auto flex flex-col items-center">
+      {/* Top Header: RepoBar & Indexing Progression Strip */}
+      <div className="relative z-20 pt-24 pb-4 px-6 bg-gradient-to-b from-[var(--surface-black)] via-[var(--surface-black)]/80 to-transparent pointer-events-auto">
+        <div className="max-w-7xl mx-auto flex flex-col items-center gap-3">
           <RepoBar
             onIndexRepo={handleIndexRepo}
             indexingStatus={indexingStatus}
           />
+
+          {/* 5-Step Horizontal Indexing Progression Strip */}
+          {isIndexing && (
+            <div className="w-full max-w-4xl flex items-center justify-between px-4 py-2 bg-[var(--surface-dark)]/90 border border-[var(--accent)] text-[10px] font-mono animate-pulse">
+              <span className="text-[var(--accent)] font-bold">PIPELINE:</span>
+              {indexingStages.map((stage, idx) => {
+                const isCurrent = indexingStatus === stage;
+                const isPast = indexingStages.indexOf(indexingStatus) > idx;
+                return (
+                  <div key={stage} className="flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${isCurrent ? 'bg-[var(--accent)] animate-ping' : isPast ? 'bg-[var(--ivory-50)]' : 'bg-[var(--border-muted)]'}`} />
+                    <span className={isCurrent ? 'text-[var(--ivory-50)] font-bold' : isPast ? 'text-[var(--pale-sage-200)]' : 'text-[var(--pale-sage-300)]/40'}>
+                      {stage.toUpperCase()}
+                    </span>
+                    {idx < indexingStages.length - 1 && <span className="text-[var(--border-muted)]">→</span>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -167,17 +218,51 @@ export function Explorer({ onRepoIndexed }) {
         </div>
       )}
 
+      {/* Tab Switcher on mobile/desktop to toggle between Chat and Node Inspector */}
+      <div className="fixed top-24 left-6 z-30 flex items-center gap-1 bg-[var(--surface-black)]/90 p-1 border border-[var(--border-muted)]/50">
+        <button
+          onClick={() => setActiveTab('chat')}
+          className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase transition-colors ${activeTab === 'chat' ? 'bg-[var(--accent)] text-[var(--ivory-50)] font-bold' : 'text-[var(--pale-sage-300)] hover:text-[var(--ivory-50)]'}`}
+        >
+          AGENT DOCK
+        </button>
+        <button
+          onClick={() => setActiveTab('node')}
+          className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase transition-colors ${activeTab === 'node' ? 'bg-[var(--accent)] text-[var(--ivory-50)] font-bold' : 'text-[var(--pale-sage-300)] hover:text-[var(--ivory-50)]'}`}
+        >
+          NODE INSPECTOR {selectedNode ? `(${selectedNode.label})` : ''}
+        </button>
+      </div>
+
       {/* Selected Node Details Drawer */}
-      <NodePanel
-        node={selectedNode}
-        onClose={() => {
-          setSelectedNode(null);
-          if (sceneRef.current) sceneRef.current.setHighlightNodes();
-        }}
-        onSelectNode={handleSelectNodeById}
-        onShowImpact={handleShowImpact}
-        loadingImpact={loadingImpact}
-      />
+      {activeTab === 'node' && selectedNode && (
+        <NodePanel
+          node={selectedNode}
+          onClose={() => {
+            setSelectedNode(null);
+            setActiveTab('chat');
+            if (sceneRef.current) sceneRef.current.setHighlightNodes();
+          }}
+          onSelectNode={(nodeId) => {
+            if (sceneRef.current) {
+              sceneRef.current.focusOnNode(nodeId);
+              const mesh = sceneRef.current.nodeMeshes.get(nodeId);
+              if (mesh) setSelectedNode(mesh.userData);
+            }
+          }}
+          onShowImpact={handleShowImpact}
+          loadingImpact={loadingImpact}
+        />
+      )}
+
+      {/* Chat Dock */}
+      {activeTab === 'chat' && (
+        <ChatDock
+          repoId={activeRepoId}
+          onCitationClick={handleCitationClick}
+          onHighlightNodes={handleHighlightNodes}
+        />
+      )}
 
       {/* Bottom Controls Legend */}
       <div className="absolute bottom-6 left-6 z-20 hidden sm:flex items-center gap-4 text-[10px] font-mono text-[var(--pale-sage-300)] bg-[var(--surface-dark)]/60 backdrop-blur-md px-4 py-1.5 border border-[var(--border-muted)]/30">
