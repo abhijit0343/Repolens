@@ -1,54 +1,33 @@
 import React from 'react';
 
 /**
- * RepoLens — Guardrail Status Badge
- * Visual indicator displaying security and verification status:
- * 'ok', 'blocked_injection', 'refused', 'budget'.
+ * RepoLens — GuardrailBadge
+ * Security status chip. Uses inline styles — no Tailwind arbitrary values.
  */
 export function GuardrailBadge({ status = 'ok', reason = '', className = '' }) {
   const configs = {
-    ok: {
-      label: 'SHIELD: VERIFIED',
-      bg: 'bg-[var(--surface-dark)]',
-      border: 'border-[var(--accent)]',
-      text: 'text-[var(--pale-sage-200)]',
-      dot: 'bg-[var(--accent)]',
-    },
-    blocked_injection: {
-      label: 'SHIELD: INJECTION BLOCKED',
-      bg: 'bg-[#2a0e14]',
-      border: 'border-red-500/60',
-      text: 'text-red-300',
-      dot: 'bg-red-500',
-    },
-    refused: {
-      label: 'SHIELD: REFUSED (UNSAFE)',
-      bg: 'bg-[#2a1b0e]',
-      border: 'border-amber-500/60',
-      text: 'text-amber-300',
-      dot: 'bg-amber-500',
-    },
-    budget: {
-      label: 'SHIELD: BUDGET REACHED',
-      bg: 'bg-[var(--surface-dark)]',
-      border: 'border-yellow-500/60',
-      text: 'text-yellow-200',
-      dot: 'bg-yellow-400',
-    },
+    ok:               { label: 'SHIELD: VERIFIED',          bg: 'rgba(44,62,49,0.9)',   border: 'var(--accent)',          color: 'var(--pale-sage-200)', dot: 'var(--accent)' },
+    blocked_injection:{ label: 'SHIELD: INJECTION BLOCKED', bg: 'rgba(42,14,20,0.9)',   border: 'rgba(239,68,68,0.6)',   color: '#fca5a5',              dot: '#ef4444' },
+    refused:          { label: 'SHIELD: REFUSED',           bg: 'rgba(42,27,14,0.9)',   border: 'rgba(245,158,11,0.6)',  color: '#fcd34d',              dot: '#f59e0b' },
+    budget:           { label: 'SHIELD: BUDGET REACHED',    bg: 'rgba(44,62,49,0.9)',   border: 'rgba(234,179,8,0.6)',   color: '#fef08a',              dot: '#eab308' },
   };
 
-  const current = configs[status] || configs.ok;
+  const c = configs[status] || configs.ok;
 
   return (
     <div
-      title={reason || current.label}
-      className={`inline-flex items-center gap-2 px-2.5 py-1 text-[10px] font-mono border tracking-wider uppercase ${current.bg} ${current.border} ${current.text} ${className}`}
+      title={reason || c.label}
+      className={className}
       style={{
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        padding: '3px 8px',
+        fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
+        background: c.bg, border: `1px solid ${c.border}`, color: c.color,
         clipPath: 'polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))',
       }}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${current.dot} ${status === 'ok' ? 'animate-pulse' : ''}`} />
-      <span className="font-semibold">{current.label}</span>
+      <span style={{ width: 6, height: 6, borderRadius: '50%', background: c.dot, display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ fontWeight: 600 }}>{c.label}</span>
     </div>
   );
 }

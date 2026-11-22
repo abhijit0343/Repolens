@@ -1,8 +1,9 @@
 import React from 'react';
 
 /**
- * RepoLens — Technical HUD Bracket Panel
- * Renders chamfered / bracket-corner panels inspired by technical telemetry displays.
+ * RepoLens — BracketPanel
+ * Technical HUD panel with chamfered corners. Uses .rl-bracket CSS classes
+ * from layout.css — no Tailwind arbitrary CSS-variable classes.
  */
 export function BracketPanel({
   title,
@@ -10,50 +11,36 @@ export function BracketPanel({
   tag = 'SYS_01',
   children,
   className = '',
+  style = {},
   variant = 'dark', // 'dark' | 'glass' | 'muted'
 }) {
-  const bgStyles = {
-    dark: 'bg-[var(--surface-dark)] text-[var(--foreground-on-dark)] border-[var(--border-muted)]',
-    glass: 'bg-[var(--glass-bg)] backdrop-blur-md text-[var(--foreground)] border-[var(--glass-border)]',
-    muted: 'bg-[var(--surface-muted)] text-[var(--foreground)] border-[var(--border-muted)]',
-  }[variant];
-
   return (
     <div
-      className={`relative p-5 border transition-all duration-300 ${bgStyles} ${className}`}
-      style={{
-        clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))',
-      }}
+      className={`rl-bracket rl-bracket--${variant} ${className}`}
+      style={style}
     >
-      {/* Corner Brackets */}
-      <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[var(--accent)] pointer-events-none" />
-      <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[var(--accent)] pointer-events-none" />
-      <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[var(--accent)] pointer-events-none" />
-      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[var(--accent)] pointer-events-none" />
+      {/* Corner ticks */}
+      <span className="rl-bracket__corner rl-bracket__corner--tl" />
+      <span className="rl-bracket__corner rl-bracket__corner--tr" />
+      <span className="rl-bracket__corner rl-bracket__corner--bl" />
+      <span className="rl-bracket__corner rl-bracket__corner--br" />
 
-      {/* Header bar */}
-      {(title || badge) && (
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border-muted)] border-opacity-30">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] tracking-widest font-mono text-[var(--accent)] uppercase font-semibold">
-              [{tag}]
-            </span>
+      {/* Header */}
+      {(title || badge || tag) && (
+        <div className="rl-bracket__header">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span className="rl-bracket__tag">[{tag}]</span>
             {title && (
-              <h4 className="text-xs font-semibold tracking-wider uppercase font-mono">
-                {title}
-              </h4>
+              <span className="rl-bracket__title">{title}</span>
             )}
           </div>
           {badge && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-black)] text-[var(--pale-sage-200)] border border-[var(--border-muted)] border-opacity-40 tracking-wider">
-              {badge}
-            </span>
+            <span className="rl-bracket__badge">{badge}</span>
           )}
         </div>
       )}
 
-      {/* Content */}
-      <div className="relative z-10 text-sm">
+      <div className="rl-bracket__content">
         {children}
       </div>
     </div>

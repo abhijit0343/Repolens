@@ -8,8 +8,8 @@ import ticker from '../lib/ticker.js';
 
 /**
  * RepoLens — GraphSoFar Section
- * Combines ChequerDissolve transition seam, HalftoneMap density lattice,
- * TraversalTrace 6.0s loop, and StatsPlate telemetry HUD.
+ * Uses .rl-graphsofar CSS classes from layout.css. No Tailwind
+ * arbitrary CSS-variable classes.
  */
 export function GraphSoFar() {
   const { graphSoFar } = CONTENT;
@@ -19,40 +19,24 @@ export function GraphSoFar() {
   const seamCanvasRef = useRef(null);
 
   useEffect(() => {
-    let halftone = null;
-    let trace = null;
-    let seam = null;
+    let halftone = null, trace = null, seam = null;
 
-    if (halftoneCanvasRef.current) {
-      halftone = new HalftoneMap(halftoneCanvasRef.current);
-    }
-    if (traceCanvasRef.current) {
-      trace = new TraversalTrace(traceCanvasRef.current);
-    }
-    if (seamCanvasRef.current) {
-      seam = new ChequerDissolve(seamCanvasRef.current);
-    }
+    try { halftone = new HalftoneMap(halftoneCanvasRef.current); } catch (e) { console.warn(e); }
+    try { trace = new TraversalTrace(traceCanvasRef.current); } catch (e) { console.warn(e); }
+    try { seam = new ChequerDissolve(seamCanvasRef.current); } catch (e) { console.warn(e); }
 
-    const handleResize = () => {
-      halftone?.resize();
-      trace?.resize();
-      seam?.resize();
-    };
-
+    const handleResize = () => { halftone?.resize(); trace?.resize(); seam?.resize(); };
     const handleScroll = () => {
       if (!sectionRef.current || !seam) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const vh = window.innerHeight || 800;
-      // Progress 0..1 as section top reaches viewport
-      const seamProgress = Math.max(0, Math.min(1, 1 - (rect.top / (vh * 0.7))));
-      seam.setProgress(seamProgress);
+      seam.setProgress(Math.max(0, Math.min(1, 1 - rect.top / (vh * 0.7))));
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    // Hook into shared RAF ticker
     const unsub = ticker.add((time) => {
       halftone?.render(time);
       trace?.update(time);
@@ -63,67 +47,42 @@ export function GraphSoFar() {
       unsub();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
-      halftone?.destroy();
-      trace?.destroy();
-      seam?.destroy();
+      halftone?.destroy(); trace?.destroy(); seam?.destroy();
     };
   }, []);
 
   return (
-    <section
-      id="graph-so-far"
-      ref={sectionRef}
-      data-stack-card
-      className="relative min-h-screen w-full flex flex-col justify-between py-24 px-6 bg-[var(--surface-black)] text-[var(--ivory-50)] overflow-hidden border-t border-[var(--border-muted)]/20"
-    >
-      {/* Top Chequered Dissolve Seam */}
-      <canvas
-        ref={seamCanvasRef}
-        className="absolute top-0 left-0 right-0 h-28 w-full pointer-events-none z-20"
-      />
+    <section id="graph-so-far" ref={sectionRef} data-stack-card className="rl-graphsofar">
+      {/* Chequered dissolve seam at top */}
+      <canvas ref={seamCanvasRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 112, width: '100%', pointerEvents: 'none', zIndex: 20 }} />
 
-      {/* Layer 1: Halftone Density Lattice */}
-      <canvas
-        ref={halftoneCanvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-40"
-      />
+      {/* Halftone lattice backdrop */}
+      <canvas ref={halftoneCanvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, opacity: 0.4 }} />
 
-      {/* Layer 2: Traversal Trace with Glowing Head & Reticle */}
-      <canvas
-        ref={traceCanvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-10"
-      />
+      {/* Traversal trace overlay */}
+      <canvas ref={traceCanvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 10 }} />
 
-      {/* Section Content */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-        {/* Header Block */}
-        <div className="max-w-2xl">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 bg-[var(--accent)]" />
-            <span className="text-xs font-mono tracking-widest text-[var(--accent)] uppercase font-semibold">
-              {graphSoFar.eyebrow}
-            </span>
+      {/* Content */}
+      <div style={{ position: 'relative', zIndex: 20, maxWidth: 1280, margin: '0 auto', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Header */}
+        <div style={{ maxWidth: 640 }}>
+          <div className="rl-eyebrow">
+            <span className="rl-eyebrow__dot" />
+            <span className="rl-eyebrow__text">{graphSoFar.eyebrow}</span>
           </div>
-
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[var(--ivory-50)] uppercase mb-4 leading-tight">
-            {graphSoFar.title}
-          </h2>
-
-          <p className="font-body text-base sm:text-lg text-[var(--pale-sage-200)] leading-relaxed">
-            {graphSoFar.subtitle}
-          </p>
+          <h2 className="rl-section-h2">{graphSoFar.title}</h2>
+          <p className="rl-section-p">{graphSoFar.subtitle}</p>
         </div>
 
-        {/* Bottom Bar: Telemetry Stats Plate & Traversal Legend */}
-        <div className="mt-16 flex flex-col lg:flex-row items-end justify-between gap-8">
+        {/* Bottom bar */}
+        <div style={{ marginTop: 64, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 32 }}>
           <StatsPlate />
-
-          <div className="p-4 bg-[var(--surface-dark)]/70 backdrop-blur-md border border-[var(--border-muted)]/40 max-w-sm w-full text-xs font-mono text-[var(--pale-sage-300)]">
-            <div className="font-semibold text-[var(--ivory-50)] mb-2 flex items-center justify-between">
+          <div className="rl-graphsofar__legend">
+            <div style={{ fontWeight: 600, color: 'var(--ivory-50)', marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>ACTIVE TRACE PROTOCOL</span>
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-ping" />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block', animation: 'pulse 1s infinite' }} />
             </div>
-            <p className="text-[11px] leading-relaxed">
+            <p style={{ fontSize: 11, lineHeight: 1.6 }}>
               Real-time traversal traces 6 high-degree call hubs. Braking reduces velocity by 75% at corners before accelerating to line speed.
             </p>
           </div>

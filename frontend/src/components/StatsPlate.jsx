@@ -2,9 +2,8 @@ import React from 'react';
 import { BracketPanel } from './BracketPanel.jsx';
 
 /**
- * RepoLens — Stats Plate HUD
- * Telemetry HUD displaying architectural density, Louvain communities,
- * traversal execution metrics, and real-time graph health.
+ * RepoLens — StatsPlate HUD
+ * Telemetry metrics panel. Uses inline styles for color tokens.
  */
 export function StatsPlate({
   density = 'HIGH (0.84)',
@@ -13,55 +12,29 @@ export function StatsPlate({
   citationsRatio = '100% CITED',
   className = '',
 }) {
+  const cell = (label, value, color = 'var(--ivory-50)') => (
+    <div>
+      <span style={{ display: 'block', fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--pale-sage-300)', marginBottom: 4 }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 700, color }}>
+        {value}
+      </span>
+    </div>
+  );
+
   return (
-    <BracketPanel
-      tag="METRICS_02"
-      title="TOPOLOGY STATUS"
-      badge="LIVE_STREAM"
-      variant="dark"
-      className={`max-w-md w-full shadow-2xl border-[var(--border-muted)]/50 ${className}`}
-    >
-      <div className="grid grid-cols-2 gap-4 my-1">
-        <div>
-          <span className="text-[10px] font-mono text-[var(--pale-sage-300)] uppercase block">
-            CALL PATH DENSITY
-          </span>
-          <span className="font-display text-xl font-bold text-[var(--ivory-50)]">
-            {density}
-          </span>
-        </div>
-
-        <div>
-          <span className="text-[10px] font-mono text-[var(--pale-sage-300)] uppercase block">
-            LOUVAIN PARTITIONS
-          </span>
-          <span className="font-display text-xl font-bold text-[var(--pale-sage-200)]">
-            {modularity}
-          </span>
-        </div>
-
-        <div>
-          <span className="text-[10px] font-mono text-[var(--pale-sage-300)] uppercase block">
-            ACTIVE TRACE
-          </span>
-          <span className="font-display text-xl font-bold text-[var(--accent)]">
-            {traversalTime}
-          </span>
-        </div>
-
-        <div>
-          <span className="text-[10px] font-mono text-[var(--pale-sage-300)] uppercase block">
-            VERIFICATION RATE
-          </span>
-          <span className="font-display text-xl font-bold text-[var(--ivory-50)]">
-            {citationsRatio}
-          </span>
-        </div>
+    <BracketPanel tag="METRICS_02" title="TOPOLOGY STATUS" badge="LIVE_STREAM" variant="dark" className={className}
+      style={{ maxWidth: 400, width: '100%' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '4px 0' }}>
+        {cell('Call Path Density', density)}
+        {cell('Louvain Partitions', modularity, 'var(--pale-sage-200)')}
+        {cell('Active Trace', traversalTime, 'var(--accent)')}
+        {cell('Verification Rate', citationsRatio)}
       </div>
-
-      <div className="mt-3 pt-3 border-t border-[var(--border-muted)]/30 flex items-center justify-between text-[10px] font-mono text-[var(--pale-sage-300)]">
+      <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(195,209,181,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: 'monospace', fontSize: 10, color: 'var(--pale-sage-300)' }}>
         <span>STATUS: 60 NODES // 120 CALLS</span>
-        <span className="text-[var(--accent)] font-semibold">● SYNCHRONIZED</span>
+        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>● SYNCHRONIZED</span>
       </div>
     </BracketPanel>
   );

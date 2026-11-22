@@ -6,9 +6,9 @@ import { GraphScene } from '../three/GraphScene.js';
 import { api } from '../lib/api.js';
 
 /**
- * RepoLens — Explorer Section (Part 2)
- * Interactive 3D Graph Exploration viewport hosting RepoBar, 5-stage indexing strip,
- * Three.js GraphScene, NodePanel inspector, and ChatDock with citations.
+ * RepoLens — Explorer Section
+ * Uses .rl-explorer CSS classes + inline styles for all structural dark backgrounds.
+ * No Tailwind arbitrary CSS-variable classes.
  */
 export function Explorer({ onRepoIndexed }) {
   const canvasContainerRef = useRef(null);
@@ -19,36 +19,21 @@ export function Explorer({ onRepoIndexed }) {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [loadingImpact, setLoadingImpact] = useState(false);
-  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'node'
+  const [activeTab, setActiveTab] = useState('chat');
 
   const indexingStages = ['cloning', 'scanning', 'parsing', 'graphing', 'summarizing'];
 
-  // Load Graph Data on Mount or Repo Switch
+  // Load graph data on mount or repo switch
   useEffect(() => {
     let active = true;
-
     async function loadData() {
       let data = null;
-      try {
-        data = await api.getGraph(activeRepoId);
-      } catch (e) {
-        console.warn('[Explorer] API getGraph fallback to mock graph:', e);
-      }
-
+      try { data = await api.getGraph(activeRepoId); } catch (e) { /* fallback */ }
       if (!data) {
-        try {
-          const res = await fetch('/mock/graph.json');
-          if (res.ok) data = await res.json();
-        } catch (err) {
-          console.error('[Explorer] Failed to load mock graph:', err);
-        }
+        try { const res = await fetch('/mock/graph.json'); if (res.ok) data = await res.json(); } catch { /* ignore */ }
       }
-
-      if (active && data && sceneRef.current) {
-        sceneRef.current.loadGraph(data);
-      }
+      if (active && data && sceneRef.current) sceneRef.current.loadGraph(data);
     }
-
     loadData();
     return () => { active = false; };
   }, [activeRepoId]);
@@ -56,31 +41,19 @@ export function Explorer({ onRepoIndexed }) {
   // Mount GraphScene
   useEffect(() => {
     if (!canvasContainerRef.current) return;
-
     const scene = new GraphScene(canvasContainerRef.current, {
       onNodeHover: (node) => setHoveredNode(node),
       onNodeClick: async (node) => {
         let details = node;
-        try {
-          const full = await api.getNode(activeRepoId, node.id);
-          if (full) details = { ...node, ...full };
-        } catch (e) {
-          // Keep node as is
-        }
+        try { const full = await api.getNode(activeRepoId, node.id); if (full) details = { ...node, ...full }; } catch { /* ignore */ }
         setSelectedNode(details);
         setActiveTab('node');
       },
     });
-
     sceneRef.current = scene;
-
-    return () => {
-      scene.destroy();
-      sceneRef.current = null;
-    };
+    return () => { scene.destroy(); sceneRef.current = null; };
   }, [activeRepoId]);
 
-  // Handle Indexing a new repo
   const handleIndexRepo = async (repoUrl) => {
     setIndexingStatus('cloning');
     try {
@@ -88,65 +61,44 @@ export function Explorer({ onRepoIndexed }) {
       if (res && res.repo_id) {
         const repoId = res.repo_id;
         setActiveRepoId(repoId);
-
-        // Poll status
-        const pollInterval = setInterval(async () => {
+        const poll = setInterval(async () => {
           try {
-            const statusRes = await api.getRepoStatus(repoId);
-            setIndexingStatus(statusRes.status);
-            if (statusRes.status === 'ready' || statusRes.status === 'error') {
-              clearInterval(pollInterval);
+            const s = await api.getRepoStatus(repoId);
+            setIndexingStatus(s.status);
+            if (s.status === 'ready' || s.status === 'error') {
+              clearInterval(poll);
               if (onRepoIndexed) onRepoIndexed(repoId);
             }
-          } catch (e) {
-            clearInterval(pollInterval);
-            setIndexingStatus('ready');
-          }
+          } catch { clearInterval(poll); setIndexingStatus('ready'); }
         }, 1500);
       }
-    } catch (err) {
-      console.warn('[Explorer] Indexing error, falling back to mock mode:', err);
-      setTimeout(() => setIndexingStatus('ready'), 1000);
-    }
+    } catch { setTimeout(() => setIndexingStatus('ready'), 1000); }
   };
 
-  // Handle Impact Analysis
   const handleShowImpact = async (symbol) => {
     setLoadingImpact(true);
     try {
       const impact = await api.getImpact(activeRepoId, symbol);
       if (impact && sceneRef.current) {
-        const upstream = (impact.upstream || []).map(item => item.id || item);
-        const downstream = (impact.downstream || []).map(item => item.id || item);
-        sceneRef.current.setHighlightNodes([selectedNode?.id], upstream, downstream);
-      }
-    } catch (err) {
-      console.warn('[Explorer] Impact calculation error:', err);
-      if (sceneRef.current && selectedNode) {
         sceneRef.current.setHighlightNodes(
-          [selectedNode.id],
-          ['app/main.py::lifespan'],
-          ['rag/retriever.py::query_vectorstore']
+          [selectedNode?.id],
+          (impact.upstream || []).map(i => i.id || i),
+          (impact.downstream || []).map(i => i.id || i)
         );
       }
-    } finally {
-      setLoadingImpact(false);
-    }
+    } catch {
+      if (sceneRef.current && selectedNode) {
+        sceneRef.current.setHighlightNodes([selectedNode.id], ['app/main.py::lifespan'], ['rag/retriever.py::query_vectorstore']);
+      }
+    } finally { setLoadingImpact(false); }
   };
 
-  // Handle Citation Chip Click: focus camera and highlight node
   const handleCitationClick = (citation) => {
     if (!sceneRef.current) return;
-    const targetPath = citation.path;
-
-    // Search for matching node by path or label
     let targetNode = null;
     sceneRef.current.nodeMeshes.forEach((mesh) => {
-      if (mesh.userData.path === targetPath || mesh.userData.id.includes(targetPath)) {
-        targetNode = mesh.userData;
-      }
+      if (mesh.userData.path === citation.path || mesh.userData.id.includes(citation.path)) targetNode = mesh.userData;
     });
-
     if (targetNode) {
       sceneRef.current.focusOnNode(targetNode.id);
       sceneRef.current.setHighlightNodes([targetNode.id]);
@@ -158,41 +110,35 @@ export function Explorer({ onRepoIndexed }) {
   const handleHighlightNodes = (nodeIds) => {
     if (sceneRef.current) {
       sceneRef.current.setHighlightNodes(nodeIds);
-      if (nodeIds.length > 0) {
-        sceneRef.current.focusOnNode(nodeIds[0]);
-      }
+      if (nodeIds.length > 0) sceneRef.current.focusOnNode(nodeIds[0]);
     }
   };
 
   const isIndexing = indexingStages.includes(indexingStatus);
+  const mono = { fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase' };
 
   return (
-    <section
-      id="explorer"
-      className="relative min-h-screen w-full flex flex-col bg-[var(--surface-black)] text-[var(--ivory-50)] overflow-hidden"
-    >
-      {/* Top Header: RepoBar & Indexing Progression Strip */}
-      <div className="relative z-20 pt-24 pb-4 px-6 bg-gradient-to-b from-[var(--surface-black)] via-[var(--surface-black)]/80 to-transparent pointer-events-auto">
-        <div className="max-w-7xl mx-auto flex flex-col items-center gap-3">
-          <RepoBar
-            onIndexRepo={handleIndexRepo}
-            indexingStatus={indexingStatus}
-          />
+    <section id="explorer" style={{ position: 'relative', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', background: 'var(--surface-black)', color: 'var(--ivory-50)', overflow: 'hidden' }}>
 
-          {/* 5-Step Horizontal Indexing Progression Strip */}
+      {/* Top bar: RepoBar + indexing strip */}
+      <div style={{ position: 'relative', zIndex: 20, paddingTop: 96, paddingBottom: 16, paddingLeft: 24, paddingRight: 24, background: 'linear-gradient(to bottom, var(--surface-black) 60%, transparent)' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <RepoBar onIndexRepo={handleIndexRepo} indexingStatus={indexingStatus} />
+
+          {/* Indexing strip */}
           {isIndexing && (
-            <div className="w-full max-w-4xl flex items-center justify-between px-4 py-2 bg-[var(--surface-dark)]/90 border border-[var(--accent)] text-[10px] font-mono animate-pulse">
-              <span className="text-[var(--accent)] font-bold">PIPELINE:</span>
+            <div style={{ width: '100%', maxWidth: 720, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', background: 'var(--surface-dark)', border: '1px solid var(--accent)', ...mono }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 700, marginRight: 12 }}>PIPELINE:</span>
               {indexingStages.map((stage, idx) => {
                 const isCurrent = indexingStatus === stage;
                 const isPast = indexingStages.indexOf(indexingStatus) > idx;
                 return (
-                  <div key={stage} className="flex items-center gap-1.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${isCurrent ? 'bg-[var(--accent)] animate-ping' : isPast ? 'bg-[var(--ivory-50)]' : 'bg-[var(--border-muted)]'}`} />
-                    <span className={isCurrent ? 'text-[var(--ivory-50)] font-bold' : isPast ? 'text-[var(--pale-sage-200)]' : 'text-[var(--pale-sage-300)]/40'}>
+                  <div key={stage} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', display: 'inline-block', background: isCurrent ? 'var(--accent)' : isPast ? 'var(--ivory-50)' : 'rgba(195,209,181,0.3)' }} />
+                    <span style={{ color: isCurrent ? 'var(--ivory-50)' : isPast ? 'var(--pale-sage-200)' : 'rgba(195,209,181,0.3)', fontWeight: isCurrent ? 700 : 400 }}>
                       {stage.toUpperCase()}
                     </span>
-                    {idx < indexingStages.length - 1 && <span className="text-[var(--border-muted)]">→</span>}
+                    {idx < indexingStages.length - 1 && <span style={{ color: 'rgba(195,209,181,0.3)', margin: '0 2px' }}>→</span>}
                   </div>
                 );
               })}
@@ -201,48 +147,37 @@ export function Explorer({ onRepoIndexed }) {
         </div>
       </div>
 
-      {/* 3D Graph Canvas Viewport */}
+      {/* 3D Graph canvas — absolute fill */}
       <div
         ref={canvasContainerRef}
-        className="absolute inset-0 w-full h-full z-10 cursor-grab active:cursor-grabbing"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 10, cursor: 'grab' }}
         aria-label="3D Code Knowledge Graph Viewport"
       />
 
-      {/* Hovered Node Tooltip HUD */}
+      {/* Hovered node tooltip */}
       {hoveredNode && !selectedNode && (
-        <div className="fixed bottom-12 left-8 z-30 pointer-events-none bg-[var(--surface-black)]/90 backdrop-blur-md px-4 py-2 border border-[var(--accent)] text-xs font-mono shadow-xl flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-          <span className="text-[var(--pale-sage-300)] uppercase">[{hoveredNode.type}]</span>
-          <span className="font-semibold text-[var(--ivory-50)]">{hoveredNode.label}</span>
-          <span className="text-[var(--pale-sage-400)]">{hoveredNode.path}</span>
+        <div style={{ position: 'fixed', bottom: 48, left: 32, zIndex: 30, pointerEvents: 'none', display: 'flex', alignItems: 'center', gap: 12, padding: '8px 16px', background: 'rgba(31,44,35,0.92)', border: '1px solid var(--accent)', backdropFilter: 'blur(8px)', ...mono }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
+          <span style={{ color: 'var(--pale-sage-300)' }}>[{hoveredNode.type}]</span>
+          <span style={{ fontWeight: 700, color: 'var(--ivory-50)' }}>{hoveredNode.label}</span>
+          <span style={{ color: 'var(--pale-sage-400)' }}>{hoveredNode.path}</span>
         </div>
       )}
 
-      {/* Tab Switcher on mobile/desktop to toggle between Chat and Node Inspector */}
-      <div className="fixed top-24 left-6 z-30 flex items-center gap-1 bg-[var(--surface-black)]/90 p-1 border border-[var(--border-muted)]/50">
-        <button
-          onClick={() => setActiveTab('chat')}
-          className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase transition-colors ${activeTab === 'chat' ? 'bg-[var(--accent)] text-[var(--ivory-50)] font-bold' : 'text-[var(--pale-sage-300)] hover:text-[var(--ivory-50)]'}`}
-        >
-          AGENT DOCK
-        </button>
-        <button
-          onClick={() => setActiveTab('node')}
-          className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase transition-colors ${activeTab === 'node' ? 'bg-[var(--accent)] text-[var(--ivory-50)] font-bold' : 'text-[var(--pale-sage-300)] hover:text-[var(--ivory-50)]'}`}
-        >
-          NODE INSPECTOR {selectedNode ? `(${selectedNode.label})` : ''}
-        </button>
+      {/* Tab switcher */}
+      <div style={{ position: 'fixed', top: 80, left: 24, zIndex: 30, display: 'flex', alignItems: 'center', gap: 2, background: 'rgba(31,44,35,0.92)', padding: 4, border: '1px solid rgba(195,209,181,0.3)' }}>
+        {[{ id: 'chat', label: 'AGENT DOCK' }, { id: 'node', label: `NODE INSPECTOR${selectedNode ? ` (${selectedNode.label})` : ''}` }].map(tab => (
+          <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ padding: '4px 12px', ...mono, fontSize: 10, background: activeTab === tab.id ? 'var(--accent)' : 'none', color: activeTab === tab.id ? 'var(--ivory-50)' : 'var(--pale-sage-300)', border: 'none', cursor: 'pointer', fontWeight: activeTab === tab.id ? 700 : 400, transition: 'all 0.2s' }}>
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* Selected Node Details Drawer */}
+      {/* Node panel */}
       {activeTab === 'node' && selectedNode && (
         <NodePanel
           node={selectedNode}
-          onClose={() => {
-            setSelectedNode(null);
-            setActiveTab('chat');
-            if (sceneRef.current) sceneRef.current.setHighlightNodes();
-          }}
+          onClose={() => { setSelectedNode(null); setActiveTab('chat'); if (sceneRef.current) sceneRef.current.setHighlightNodes(); }}
           onSelectNode={(nodeId) => {
             if (sceneRef.current) {
               sceneRef.current.focusOnNode(nodeId);
@@ -255,17 +190,13 @@ export function Explorer({ onRepoIndexed }) {
         />
       )}
 
-      {/* Chat Dock */}
+      {/* Chat dock */}
       {activeTab === 'chat' && (
-        <ChatDock
-          repoId={activeRepoId}
-          onCitationClick={handleCitationClick}
-          onHighlightNodes={handleHighlightNodes}
-        />
+        <ChatDock repoId={activeRepoId} onCitationClick={handleCitationClick} onHighlightNodes={handleHighlightNodes} />
       )}
 
-      {/* Bottom Controls Legend */}
-      <div className="absolute bottom-6 left-6 z-20 hidden sm:flex items-center gap-4 text-[10px] font-mono text-[var(--pale-sage-300)] bg-[var(--surface-dark)]/60 backdrop-blur-md px-4 py-1.5 border border-[var(--border-muted)]/30">
+      {/* Controls legend */}
+      <div style={{ position: 'absolute', bottom: 24, left: 24, zIndex: 20, display: 'flex', alignItems: 'center', gap: 12, padding: '6px 16px', background: 'rgba(44,62,49,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(195,209,181,0.2)', ...mono, fontSize: 10, color: 'var(--pale-sage-300)' }}>
         <span>ROTATE: LEFT DRAG</span>
         <span>•</span>
         <span>PAN: RIGHT DRAG</span>

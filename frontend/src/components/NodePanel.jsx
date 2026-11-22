@@ -2,137 +2,92 @@ import React from 'react';
 import { BracketPanel } from './BracketPanel.jsx';
 
 /**
- * RepoLens — Node Inspector HUD Panel
- * Stepped-corner modal drawer showing node details, AST summary,
- * syntax code snippet, callers/callees list, and Impact Analysis button.
+ * RepoLens — NodePanel (Node Inspector HUD)
+ * Uses inline styles for all structural styling — no Tailwind arbitrary CSS-variable classes.
  */
-export function NodePanel({
-  node,
-  onClose,
-  onSelectNode,
-  onShowImpact,
-  loadingImpact = false,
-  className = '',
-}) {
+export function NodePanel({ node, onClose, onSelectNode, onShowImpact, loadingImpact = false, className = '' }) {
   if (!node) return null;
 
-  return (
-    <div
-      className={`fixed top-24 right-6 w-96 max-w-[calc(100vw-3rem)] z-30 animate-in fade-in slide-in-from-right-4 duration-300 ${className}`}
+  const mono = { fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.08em' };
+
+  const callerBtn = (c, arrow) => (
+    <button key={c} onClick={() => onSelectNode && onSelectNode(c)}
+      style={{ ...mono, fontSize: 10, textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--pale-sage-200)', background: 'rgba(44,62,49,0.6)', border: 'none', cursor: 'pointer', padding: '2px 6px', transition: 'color 0.2s' }}
+      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--pale-sage-200)'}
     >
+      {arrow} {c}
+    </button>
+  );
+
+  return (
+    <div style={{ position: 'fixed', top: 96, right: 24, width: 384, maxWidth: 'calc(100vw - 48px)', zIndex: 30 }} className={className}>
       <BracketPanel
         tag={`NODE_${node.type?.toUpperCase() || 'SYMBOL'}`}
         title={node.label || 'Node Details'}
         badge={node.type}
         variant="dark"
-        className="shadow-2xl border-[var(--border-muted)]/60 bg-[var(--surface-black)]/95 backdrop-blur-lg"
+        style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)', background: 'rgba(31,44,35,0.95)' }}
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-[var(--pale-sage-300)] hover:text-[var(--ivory-50)] text-sm font-mono"
-          aria-label="Close Inspector"
-        >
-          ✕
-        </button>
+        {/* Close */}
+        <button onClick={onClose} aria-label="Close" style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--pale-sage-300)', ...mono }} onMouseEnter={(e) => e.target.style.color = 'var(--ivory-50)'} onMouseLeave={(e) => e.target.style.color = 'var(--pale-sage-300)'}>✕</button>
 
-        {/* File Path & Line Numbers */}
-        <div className="mb-3 text-[11px] font-mono text-[var(--pale-sage-300)] flex items-center justify-between border-b border-[var(--border-muted)]/20 pb-2">
-          <span className="truncate mr-2 text-[var(--ivory-50)]">
-            {node.path || 'unknown.py'}
-          </span>
-          <span className="shrink-0 text-[var(--accent)] font-semibold">
-            L{node.start_line ?? 1}:{node.end_line ?? 1}
-          </span>
+        {/* Path + lines */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, paddingBottom: 8, borderBottom: '1px solid rgba(195,209,181,0.15)', ...mono }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: 8, color: 'var(--ivory-50)' }}>{node.path || 'unknown.py'}</span>
+          <span style={{ flexShrink: 0, color: 'var(--accent)', fontWeight: 600 }}>L{node.start_line ?? 1}:{node.end_line ?? 1}</span>
         </div>
 
-        {/* Node Summary */}
-        <div className="mb-4">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--pale-sage-300)] block mb-1">
-            AST SUMMARY
-          </span>
-          <p className="text-xs text-[var(--pale-sage-200)] leading-relaxed bg-[var(--surface-dark)]/60 p-2.5 border border-[var(--border-muted)]/30">
+        {/* Summary */}
+        <div style={{ marginBottom: 16 }}>
+          <span style={{ display: 'block', ...mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.16em', color: 'var(--pale-sage-300)', marginBottom: 6 }}>AST SUMMARY</span>
+          <p style={{ fontSize: 12, color: 'var(--pale-sage-200)', lineHeight: 1.6, background: 'rgba(44,62,49,0.5)', padding: '10px 12px', border: '1px solid rgba(195,209,181,0.18)' }}>
             {node.summary || 'Symbol indexed via Tree-Sitter AST parser with internal call resolution.'}
           </p>
         </div>
 
-        {/* Code Snippet */}
+        {/* Code snippet */}
         {node.code_snippet && (
-          <div className="mb-4">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--pale-sage-300)] block mb-1">
-              SOURCE CODE
-            </span>
-            <pre className="text-[11px] font-mono text-[var(--ivory-50)] bg-[var(--surface-dark)] p-2.5 overflow-x-auto max-h-36 border border-[var(--border-muted)]/40 rounded-none">
+          <div style={{ marginBottom: 16 }}>
+            <span style={{ display: 'block', ...mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.16em', color: 'var(--pale-sage-300)', marginBottom: 6 }}>SOURCE CODE</span>
+            <pre style={{ ...mono, fontSize: 11, color: 'var(--ivory-50)', background: 'var(--surface-dark)', padding: '10px 12px', overflowX: 'auto', maxHeight: 144, border: '1px solid rgba(195,209,181,0.2)', margin: 0 }}>
               <code>{node.code_snippet}</code>
             </pre>
           </div>
         )}
 
-        {/* Callers & Callees */}
-        <div className="grid grid-cols-2 gap-2 mb-4 text-[11px] font-mono">
+        {/* Callers / Callees */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
           <div>
-            <span className="text-[10px] uppercase text-[var(--pale-sage-300)] block mb-1">
-              CALLERS ({node.callers?.length || 0})
-            </span>
-            <div className="max-h-20 overflow-y-auto flex flex-col gap-1 pr-1">
-              {node.callers && node.callers.length > 0 ? (
-                node.callers.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => onSelectNode && onSelectNode(c)}
-                    className="text-left truncate text-[10px] text-[var(--pale-sage-200)] hover:text-[var(--accent)] bg-[var(--surface-dark)] px-1.5 py-0.5"
-                  >
-                    ← {c}
-                  </button>
-                ))
-              ) : (
-                <span className="text-[10px] text-[var(--pale-sage-300)]/60 italic">None</span>
-              )}
+            <span style={{ display: 'block', ...mono, fontSize: 10, textTransform: 'uppercase', color: 'var(--pale-sage-300)', marginBottom: 4 }}>CALLERS ({node.callers?.length || 0})</span>
+            <div style={{ maxHeight: 80, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {node.callers?.length > 0 ? node.callers.map((c) => callerBtn(c, '←')) : <span style={{ fontSize: 10, color: 'rgba(195,209,181,0.4)', fontStyle: 'italic' }}>None</span>}
             </div>
           </div>
-
           <div>
-            <span className="text-[10px] uppercase text-[var(--pale-sage-300)] block mb-1">
-              CALLEES ({node.callees?.length || 0})
-            </span>
-            <div className="max-h-20 overflow-y-auto flex flex-col gap-1 pr-1">
-              {node.callees && node.callees.length > 0 ? (
-                node.callees.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => onSelectNode && onSelectNode(c)}
-                    className="text-left truncate text-[10px] text-[var(--pale-sage-200)] hover:text-[var(--accent)] bg-[var(--surface-dark)] px-1.5 py-0.5"
-                  >
-                    → {c}
-                  </button>
-                ))
-              ) : (
-                <span className="text-[10px] text-[var(--pale-sage-300)]/60 italic">None</span>
-              )}
+            <span style={{ display: 'block', ...mono, fontSize: 10, textTransform: 'uppercase', color: 'var(--pale-sage-300)', marginBottom: 4 }}>CALLEES ({node.callees?.length || 0})</span>
+            <div style={{ maxHeight: 80, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {node.callees?.length > 0 ? node.callees.map((c) => callerBtn(c, '→')) : <span style={{ fontSize: 10, color: 'rgba(195,209,181,0.4)', fontStyle: 'italic' }}>None</span>}
             </div>
           </div>
         </div>
 
-        {/* Impact Analysis Action */}
+        {/* Impact button */}
         <button
           onClick={() => onShowImpact && onShowImpact(node.label || node.id)}
           disabled={loadingImpact}
-          className="w-full py-2.5 font-mono text-xs uppercase font-bold tracking-wider bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--ivory-50)] transition-all shadow-md flex items-center justify-center gap-2"
           style={{
+            width: '100%', padding: '10px', ...mono, fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+            background: loadingImpact ? 'var(--forest-sage-700)' : 'var(--accent)',
+            color: 'var(--ivory-50)', border: 'none', cursor: loadingImpact ? 'not-allowed' : 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'background 0.2s',
             clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
           }}
         >
-          {loadingImpact ? (
-            <>
-              <span className="w-2.5 h-2.5 border-2 border-[var(--ivory-50)] border-t-transparent rounded-full animate-spin" />
-              <span>CALCULATING IMPACT...</span>
-            </>
-          ) : (
-            <>
-              <span>⚡</span>
-              <span>ANALYZE BLAST RADIUS</span>
-            </>
-          )}
+          {loadingImpact
+            ? <><span style={{ width: 10, height: 10, border: '2px solid var(--ivory-50)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />CALCULATING IMPACT…</>
+            : <>⚡ ANALYZE BLAST RADIUS</>
+          }
         </button>
       </BracketPanel>
     </div>

@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 
 /**
- * RepoLens — Repository URL Input & Indexing Bar
- * Controls target repo URL, triggers indexing, displays live pipeline status,
- * and provides quick sample repository buttons.
+ * RepoLens — RepoBar
+ * Repository URL input and indexing trigger. Uses .rl-repobar CSS classes
+ * and inline styles — no Tailwind arbitrary CSS-variable classes.
  */
-export function RepoBar({
-  onIndexRepo,
-  indexingStatus = 'idle',
-  activeRepoUrl = '',
-  className = '',
-}) {
+export function RepoBar({ onIndexRepo, indexingStatus = 'idle', activeRepoUrl = '', className = '' }) {
   const [url, setUrl] = useState(activeRepoUrl || 'https://github.com/octocat/Hello-World');
   const [validationError, setValidationError] = useState('');
 
@@ -20,88 +15,84 @@ export function RepoBar({
     { label: 'expressjs/express', url: 'https://github.com/expressjs/express' },
   ];
 
+  const isIndexing = ['cloning', 'scanning', 'parsing', 'graphing', 'summarizing'].includes(indexingStatus);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const cleanUrl = url.trim();
-    const githubRegex = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
-
-    if (!githubRegex.test(cleanUrl)) {
-      setValidationError('Must be in format: https://github.com/<owner>/<repo>');
+    if (!/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(cleanUrl)) {
+      setValidationError('Must be: https://github.com/<owner>/<repo>');
       return;
     }
-
     setValidationError('');
-    if (onIndexRepo) {
-      onIndexRepo(cleanUrl);
-    }
+    if (onIndexRepo) onIndexRepo(cleanUrl);
   };
 
-  const isIndexing = ['cloning', 'scanning', 'parsing', 'graphing', 'summarizing'].includes(indexingStatus);
-
   return (
-    <div className={`w-full max-w-4xl mx-auto ${className}`}>
+    <div style={{ width: '100%', maxWidth: 720, margin: '0 auto' }} className={className}>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col sm:flex-row items-stretch gap-2 bg-[var(--surface-black)]/90 backdrop-blur-md p-2 border border-[var(--border-muted)]/40 shadow-xl"
         style={{
+          display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'stretch',
+          background: 'rgba(31,44,35,0.92)', backdropFilter: 'blur(12px)',
+          padding: 8, border: '1px solid rgba(195,209,181,0.3)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
           clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
         }}
       >
-        <div className="flex-1 flex items-center gap-2 px-3 bg-[var(--surface-dark)]/80 border border-[var(--border-muted)]/20">
-          <span className="font-mono text-xs text-[var(--accent)] font-bold">REPO //</span>
+        {/* Input area */}
+        <div style={{ flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', background: 'rgba(44,62,49,0.6)', border: '1px solid rgba(195,209,181,0.18)' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>REPO //</span>
           <input
             type="url"
             value={url}
-            onChange={(e) => {
-              setUrl(e.target.value);
-              if (validationError) setValidationError('');
-            }}
+            onChange={(e) => { setUrl(e.target.value); if (validationError) setValidationError(''); }}
             placeholder="https://github.com/owner/repository"
-            className="w-full py-2.5 bg-transparent font-mono text-xs text-[var(--ivory-50)] placeholder-[var(--pale-sage-300)]/40 focus:outline-none"
             disabled={isIndexing}
+            style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontFamily: 'monospace', fontSize: 12, color: 'var(--ivory-50)', padding: '10px 0' }}
           />
         </div>
 
+        {/* Submit button */}
         <button
           type="submit"
           disabled={isIndexing}
-          className="px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--ivory-50)] transition-all flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-50 shadow"
+          style={{
+            padding: '10px 24px', background: isIndexing ? 'var(--forest-sage-700)' : 'var(--accent)',
+            color: 'var(--ivory-50)', fontFamily: 'monospace', fontSize: 11, fontWeight: 700,
+            letterSpacing: '0.12em', textTransform: 'uppercase', border: 'none', cursor: isIndexing ? 'not-allowed' : 'pointer',
+            display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', transition: 'background 0.2s',
+          }}
         >
           {isIndexing ? (
             <>
-              <span className="w-3 h-3 border-2 border-[var(--ivory-50)] border-t-transparent rounded-full animate-spin" />
-              <span>INDEXING ({indexingStatus.toUpperCase()})...</span>
+              <span style={{ width: 12, height: 12, border: '2px solid var(--ivory-50)', borderTopColor: 'transparent', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
+              INDEXING ({indexingStatus.toUpperCase()})…
             </>
-          ) : (
-            <span>INDEX REPOSITORY</span>
-          )}
+          ) : 'INDEX REPOSITORY'}
         </button>
       </form>
 
-      {/* Validation Alert */}
       {validationError && (
-        <p className="text-[11px] font-mono text-red-400 mt-1.5 pl-2">
+        <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#f87171', marginTop: 6, paddingLeft: 8 }}>
           ⚠ {validationError}
         </p>
       )}
 
-      {/* Quick Sample Links */}
-      <div className="flex items-center gap-2 mt-2 px-1 text-[10px] font-mono text-[var(--pale-sage-300)]">
-        <span className="text-[var(--accent)]">QUICK PICK:</span>
-        {sampleRepos.map((sample) => (
-          <button
-            key={sample.url}
-            type="button"
-            onClick={() => {
-              setUrl(sample.url);
-              setValidationError('');
-            }}
-            className="hover:text-[var(--ivory-50)] underline underline-offset-2 transition-colors"
+      {/* Quick sample links */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginTop: 8, paddingLeft: 4, fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.12em' }}>
+        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>QUICK PICK:</span>
+        {sampleRepos.map((s) => (
+          <button key={s.url} type="button" onClick={() => { setUrl(s.url); setValidationError(''); }}
+            style={{ background: 'none', border: 'none', color: 'var(--pale-sage-300)', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2, fontFamily: 'monospace', fontSize: 10, transition: 'color 0.2s' }}
+            onMouseEnter={(e) => e.target.style.color = 'var(--ivory-50)'}
+            onMouseLeave={(e) => e.target.style.color = 'var(--pale-sage-300)'}
           >
-            {sample.label}
+            {s.label}
           </button>
         ))}
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

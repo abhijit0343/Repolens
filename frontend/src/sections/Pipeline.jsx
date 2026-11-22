@@ -6,8 +6,8 @@ import { TextReveal } from '../lib/textReveal.js';
 
 /**
  * RepoLens — Pipeline Section
- * 5 operational stages (Index, Graph, Plan, Search, Verify) connected by a dynamic progress rail,
- * turning diamond markers, stepped-corner plates, parallax watermarks, and letter reveals.
+ * 5-stage timeline. All dark backgrounds and color tokens via inline styles
+ * or layout.css classes — no Tailwind arbitrary CSS-variable classes.
  */
 export function Pipeline() {
   const { pipeline } = CONTENT;
@@ -18,28 +18,19 @@ export function Pipeline() {
 
   useEffect(() => {
     if (!sectionRef.current) return;
-
-    // Initialize ScrollTrigger for the progress rail
     const trigger = createScrollTrigger(sectionRef.current, {
       startOffset: 0.15,
       endOffset: 0.85,
       onUpdate: ({ progress }) => {
         setScrollProgress(progress);
-        const stepIdx = Math.min(
-          Math.floor(progress * pipeline.steps.length),
-          pipeline.steps.length - 1
-        );
-        setActiveStepIndex(stepIdx);
+        setActiveStepIndex(Math.min(Math.floor(progress * pipeline.steps.length), pipeline.steps.length - 1));
       },
     });
-
-    // Initialize TextReveals on step titles
     const headings = sectionRef.current.querySelectorAll('[data-pipeline-reveal]');
     headings.forEach((el) => {
       const rev = new TextReveal(el, { mode: 'words', staggerMs: 30 });
       revealsRef.current.push(rev);
     });
-
     return () => {
       trigger.destroy();
       revealsRef.current.forEach((r) => r.destroy());
@@ -47,13 +38,8 @@ export function Pipeline() {
     };
   }, [pipeline.steps.length]);
 
-  // Trigger reveals as steps become active
   useEffect(() => {
-    revealsRef.current.forEach((rev, idx) => {
-      if (idx <= activeStepIndex) {
-        rev.play();
-      }
-    });
+    revealsRef.current.forEach((rev, idx) => { if (idx <= activeStepIndex) rev.play(); });
   }, [activeStepIndex]);
 
   return (
@@ -61,115 +47,92 @@ export function Pipeline() {
       id="pipeline"
       ref={sectionRef}
       data-stack-card
-      className="relative min-h-screen w-full py-28 px-6 bg-[var(--surface-black)] text-[var(--ivory-50)] overflow-hidden border-t border-[var(--border-muted)]/20"
+      className="rl-pipeline"
     >
-      <div className="max-w-5xl mx-auto w-full relative z-10">
+      <div style={{ maxWidth: 900, margin: '0 auto', width: '100%', position: 'relative', zIndex: 10 }}>
+
         {/* Section Header */}
-        <div className="mb-20 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--surface-dark)]/80 border border-[var(--border-muted)]/30 text-[10px] font-mono text-[var(--accent)] uppercase font-semibold mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
+        <div style={{ marginBottom: 80, textAlign: 'center', maxWidth: 580, margin: '0 auto 80px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px',
+            background: 'var(--surface-dark)', border: '1px solid rgba(195,209,181,0.25)',
+            fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
+            color: 'var(--accent)', fontWeight: 600, marginBottom: 12
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
             {pipeline.eyebrow}
           </div>
-
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[var(--ivory-50)] uppercase mb-4">
-            {pipeline.title}
-          </h2>
-
-          <p className="font-body text-base text-[var(--pale-sage-200)] leading-relaxed">
-            {pipeline.description}
-          </p>
+          <h2 className="rl-section-h2" style={{ textAlign: 'center' }}>{pipeline.title}</h2>
+          <p className="rl-section-p" style={{ margin: '0 auto', textAlign: 'center' }}>{pipeline.description}</p>
         </div>
 
-        {/* Timeline Container */}
-        <div className="relative">
-          {/* Vertical Glowing Progress Rail Track */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-[var(--surface-dark)] border-r border-[var(--border-muted)]/30">
-            <div
-              className="w-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent)] transition-all duration-150 ease-out"
-              style={{ height: `${(scrollProgress * 100).toFixed(1)}%` }}
-            />
+        {/* Progress rail */}
+        <div className="rl-pipeline__progress">
+          <div className="rl-pipeline__progress-fill" style={{ width: `${(scrollProgress * 100).toFixed(1)}%` }} />
+        </div>
+
+        {/* Timeline steps */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 56, position: 'relative' }}>
+          {/* Vertical rail line */}
+          <div style={{
+            position: 'absolute', left: 24, top: 0, bottom: 0, width: 1,
+            background: 'rgba(195,209,181,0.18)',
+          }}>
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0,
+              background: 'var(--accent)',
+              boxShadow: '0 0 10px var(--accent)',
+              height: `${(scrollProgress * 100).toFixed(1)}%`,
+              transition: 'height 0.15s ease-out',
+            }} />
           </div>
 
-          {/* 5 Operational Steps */}
-          <div className="flex flex-col gap-14 relative z-10">
-            {pipeline.steps.map((step, idx) => {
-              const isActive = idx <= activeStepIndex;
-              const isEven = idx % 2 === 0;
-              // Turning marker angle: rotates from 0 to 45 deg as row is reached
-              const markerRotation = isActive ? 45 : 0;
-
-              return (
-                <div
-                  key={step.id}
-                  className={`relative flex items-center gap-8 ${
-                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
-                  } flex-row pl-14 md:pl-0`}
-                >
-                  {/* Turning Diamond Marker along Central Rail */}
-                  <div
-                    className="absolute left-6 md:left-1/2 top-8 -translate-x-1/2 flex items-center justify-center z-20 pointer-events-none"
-                  >
-                    <div
-                      className={`w-6 h-6 border-2 transition-all duration-500 flex items-center justify-center ${
-                        isActive
-                          ? 'border-[var(--accent)] bg-[var(--surface-black)] shadow-[0_0_12px_var(--accent)]'
-                          : 'border-[var(--border-muted)]/50 bg-[var(--surface-dark)]'
-                      }`}
-                      style={{ transform: `rotate(${markerRotation}deg)` }}
-                    >
-                      <div
-                        className={`w-2 h-2 transition-colors duration-300 ${
-                          isActive ? 'bg-[var(--ivory-50)]' : 'bg-transparent'
-                        }`}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Step Plate */}
-                  <div className="w-full md:w-[calc(50%-40px)]">
-                    <BracketPanel
-                      tag={`PHASE_${step.id}`}
-                      title={step.name}
-                      badge={step.subtitle}
-                      variant="dark"
-                      className={`transition-all duration-500 ${
-                        isActive
-                          ? 'border-[var(--accent)]/60 shadow-xl'
-                          : 'border-[var(--border-muted)]/30 opacity-70'
-                      }`}
-                    >
-                      {/* Parallax Ghost Watermark Number */}
-                      <span className="absolute -top-4 right-4 font-display text-5xl font-extrabold text-[var(--surface-muted)]/5 pointer-events-none select-none">
-                        {step.id}
-                      </span>
-
-                      <p
-                        data-pipeline-reveal
-                        className="font-body text-sm text-[var(--pale-sage-200)] leading-relaxed mb-4"
-                      >
-                        {step.description}
-                      </p>
-
-                      {/* Architecture Tags */}
-                      <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border-muted)]/20">
-                        {step.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[9px] font-mono px-2 py-0.5 bg-[var(--surface-black)] text-[var(--pale-sage-300)] border border-[var(--border-muted)]/30 tracking-wider uppercase"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </BracketPanel>
-                  </div>
-
-                  {/* Counter Spacer on the other side for desktop symmetry */}
-                  <div className="hidden md:block w-[calc(50%-40px)]" />
+          {pipeline.steps.map((step, idx) => {
+            const isActive = idx <= activeStepIndex;
+            const markerRot = isActive ? 45 : 0;
+            return (
+              <div key={step.id} style={{ position: 'relative', paddingLeft: 56 }}>
+                {/* Diamond marker */}
+                <div style={{
+                  position: 'absolute', left: 24, top: 24,
+                  transform: `translate(-50%, 0) rotate(${markerRot}deg)`,
+                  width: 24, height: 24, border: `2px solid ${isActive ? 'var(--accent)' : 'rgba(195,209,181,0.3)'}`,
+                  background: isActive ? 'var(--surface-black)' : 'var(--surface-dark)',
+                  boxShadow: isActive ? '0 0 12px var(--accent)' : 'none',
+                  transition: 'all 0.5s ease', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div style={{ width: 8, height: 8, background: isActive ? 'var(--ivory-50)' : 'transparent', transition: 'background 0.3s' }} />
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Step plate */}
+                <BracketPanel
+                  tag={`PHASE_${step.id}`}
+                  title={step.name}
+                  badge={step.subtitle}
+                  variant="dark"
+                  style={{ opacity: isActive ? 1 : 0.65, transition: 'opacity 0.5s, border-color 0.5s', borderColor: isActive ? 'rgba(107,138,110,0.6)' : 'rgba(195,209,181,0.2)' }}
+                >
+                  {/* Ghost watermark */}
+                  <span style={{
+                    position: 'absolute', top: -16, right: 16,
+                    fontFamily: 'var(--font-display)', fontSize: '3.5rem', fontWeight: 800,
+                    color: 'rgba(248,245,234,0.04)', pointerEvents: 'none', userSelect: 'none',
+                  }}>{step.id}</span>
+
+                  <p data-pipeline-reveal style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--pale-sage-200)', lineHeight: 1.65, marginBottom: 16 }}>
+                    {step.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, paddingTop: 10, borderTop: '1px solid rgba(195,209,181,0.15)' }}>
+                    {step.tags.map((tag) => (
+                      <span key={tag} className="rl-tag">{tag}</span>
+                    ))}
+                  </div>
+                </BracketPanel>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

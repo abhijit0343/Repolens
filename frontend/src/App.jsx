@@ -47,7 +47,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased selection:bg-[var(--accent)] selection:text-[var(--ivory-50)] overflow-x-hidden flex flex-col justify-between">
+    <div style={{ minHeight: '100vh', background: 'var(--surface-black)', color: 'var(--ivory-50)', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
       {/* 3-beat loader */}
       <Loader ready={scenesReady} />
 

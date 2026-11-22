@@ -77,35 +77,29 @@ export function Loader({ ready = false, onComplete }) {
       role="status"
       aria-live="polite"
       aria-label="Application loading"
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--surface-black)] text-[var(--ivory-50)] pointer-events-none select-none transition-opacity duration-150"
-      style={{ opacity: opacity }}
+      className="rl-loader"
+      style={{ opacity, pointerEvents: 'none', userSelect: 'none', transition: 'opacity 0.15s' }}
     >
-      <div className="w-full max-w-md px-8 flex flex-col items-center">
-        {/* Top Logo / Tag */}
-        <div className="flex items-center gap-3 mb-6">
-          <span className="w-3 h-3 bg-[var(--accent)] animate-spin" />
-          <span className="font-display text-2xl tracking-widest font-bold text-[var(--ivory-50)]">
+      <div style={{ width: '100%', maxWidth: 400, padding: '0 32px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+          <span style={{ width: 12, height: 12, background: 'var(--accent)', display: 'inline-block', animation: 'spin 1s linear infinite' }} />
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.15em', fontWeight: 700, color: 'var(--ivory-50)', textTransform: 'uppercase' }}>
             {CONTENT.brand.name}
           </span>
-          <span className="font-mono text-[10px] tracking-wider text-[var(--pale-sage-300)] uppercase">
-            [BOOT]
-          </span>
+          <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.16em', color: 'var(--pale-sage-300)', textTransform: 'uppercase' }}>[BOOT]</span>
         </div>
-
-        {/* Progress Bar Container */}
-        <div className="w-full h-1.5 bg-[var(--surface-dark)] border border-[var(--border-muted)]/40 overflow-hidden relative mb-4">
-          <div
-            className="h-full bg-[var(--accent)] transition-all duration-75 ease-out shadow-[0_0_12px_var(--accent)]"
-            style={{ width: `${percentDisplay}%` }}
-          />
+        {/* Progress bar */}
+        <div style={{ width: '100%', height: 3, background: 'var(--surface-dark)', border: '1px solid rgba(195,209,181,0.2)', overflow: 'hidden', position: 'relative', marginBottom: 16 }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, background: 'var(--accent)', boxShadow: '0 0 12px var(--accent)', width: `${percentDisplay}%`, transition: 'width 0.075s ease-out' }} />
         </div>
-
-        {/* Status Line */}
-        <div className="w-full flex items-center justify-between text-xs font-mono text-[var(--pale-sage-300)]">
-          <span className="truncate mr-4 text-[11px] tracking-wider">{statusMessage}</span>
-          <span className="font-semibold text-[var(--accent)]">{percentDisplay}%</span>
+        {/* Status */}
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: 'monospace', fontSize: 11, color: 'var(--pale-sage-300)' }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: 16, letterSpacing: '0.1em' }}>{statusMessage}</span>
+          <span style={{ fontWeight: 600, color: 'var(--accent)', flexShrink: 0 }}>{percentDisplay}%</span>
         </div>
       </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
