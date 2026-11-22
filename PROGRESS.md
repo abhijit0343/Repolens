@@ -20,4 +20,4 @@
 | **F6** | Pipeline timeline | DONE | 5-stage timeline, dynamic progress rail, turning markers & letter reveals verified |
 | **F7** | Explorer part 1 (GraphScene + NodePanel + ContourCanvas + RepoBar) | DONE | Full 3D GraphScene, instanced nodes/edges, raycaster, NodePanel & RepoBar verified |
 | **F8** | Explorer part 2 (ChatDock + GuardrailBadge + impact view + indexing strip + API wire) | DONE | ChatDock with citations chips, GuardrailBadge, 5-stage indexing strip & offline fallback verified |
-| **F9** | Footer + App assembly + a11y + performance pass + documentation | PENDING | |
+| **F9** | Footer + App assembly + a11y + performance pass + documentation | DONE | Technical Footer, sticky recession assembly, a11y keyboard nav, root README.md verified |

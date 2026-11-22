@@ -5,6 +5,7 @@ import { Hero } from './sections/Hero.jsx';
 import { GraphSoFar } from './sections/GraphSoFar.jsx';
 import { Pipeline } from './sections/Pipeline.jsx';
 import { Explorer } from './sections/Explorer.jsx';
+import { Footer } from './sections/Footer.jsx';
 import { Banner } from './components/Banner.jsx';
 import { initLenis, destroyLenis } from './lib/lenis.js';
 import { StackManager } from './lib/stack.js';
@@ -15,15 +16,15 @@ export function App() {
   const stackContainerRef = useRef(null);
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
+    // 1. Initialize Lenis smooth scroll
     initLenis();
 
-    // Signal loader ready after assets mount
+    // 2. Signal loader ready after assets mount
     const readyTimer = setTimeout(() => {
       setScenesReady(true);
     }, 400);
 
-    // Initialize Sticky Stack
+    // 3. Initialize Sticky Stack on pinned sections
     let stackManager = null;
     if (stackContainerRef.current) {
       stackManager = new StackManager(stackContainerRef.current, {
@@ -40,13 +41,18 @@ export function App() {
     };
   }, []);
 
+  const handleExploreClick = () => {
+    const el = document.querySelector('#explorer');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased selection:bg-[var(--accent)] selection:text-[var(--ivory-50)] overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased selection:bg-[var(--accent)] selection:text-[var(--ivory-50)] overflow-x-hidden flex flex-col justify-between">
       {/* 3-beat loader */}
       <Loader ready={scenesReady} />
 
       {/* Global Masthead */}
-      <Masthead />
+      <Masthead onExploreClick={handleExploreClick} />
 
       {/* Offline fallback banner */}
       {offline && (
@@ -59,13 +65,18 @@ export function App() {
         </div>
       )}
 
-      {/* Stacked Sections Container */}
+      {/* Stacked Pinned Sections Container (Hero, GraphSoFar, Pipeline) */}
       <main ref={stackContainerRef} className="relative w-full">
-        <Hero />
+        <Hero onExploreClick={handleExploreClick} />
         <GraphSoFar />
         <Pipeline />
-        <Explorer />
       </main>
+
+      {/* Unpinned Full-Viewport Explorer Section */}
+      <Explorer />
+
+      {/* Unpinned Technical Footer */}
+      <Footer />
     </div>
   );
 }
