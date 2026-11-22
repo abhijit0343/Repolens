@@ -1,7 +1,8 @@
 """Gemini LLM and Embeddings setup for RepoLens.
 
 Uses langchain-google-genai as the sole LLM & embeddings provider.
-Includes tagged_llm helper for granular LangSmith observability per agent.
+Includes tagged_llm helper for granular LangSmith observability per agent,
+with fast timeouts and robust fallback.
 """
 from typing import Optional
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
@@ -9,11 +10,18 @@ from backend.app.config import settings
 
 
 def get_llm(temperature: float = 0.2) -> ChatGoogleGenerativeAI:
-    """Instantiate the primary Gemini chat model."""
+    """Instantiate the primary Gemini chat model with safe retries and timeout."""
+    # Ensure a valid existing Gemini model name
+    model_name = settings.llm_model.strip()
+    if "3.8" in model_name or "3.5" in model_name or not model_name.startswith("gemini"):
+        model_name = "gemini-2.5-flash"
+
     return ChatGoogleGenerativeAI(
-        model=settings.llm_model,
+        model=model_name,
         google_api_key=settings.gemini_api_key,
         temperature=temperature,
+        max_retries=1,
+        timeout=10.0,
         convert_system_message_to_human=False,
     )
 

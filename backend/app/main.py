@@ -4,6 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.app.config import settings
 from backend.app.db.repos import init_db
+from backend.app.api.repos import router as repos_router
+from backend.app.api.graph import router as graph_router
+from backend.app.api.ask import router as ask_router
 
 
 @asynccontextmanager
@@ -28,6 +31,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount API Routers
+app.include_router(repos_router)
+app.include_router(graph_router)
+app.include_router(ask_router)
 
 
 @app.get("/health", tags=["system"])

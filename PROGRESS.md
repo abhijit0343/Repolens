@@ -9,7 +9,7 @@
 | **B3** | Code graph (builder, communities, summarize, store) + Chroma embed/retriever | DONE | Louvain communities, 3D spring layout, JSON schema validation and Chroma vectorstore verified |
 | **B4** | impact.py + tools (code_search, graph_search, impact_analysis, read_file, web_search) | DONE | Impact calculation, blast radius, ego-graph, safe file reader, web/code search tools verified |
 | **B5** | Multi-agent workflow (planner, code_searcher, graph_analyst, web_docs, critic) + StateGraph | DONE | LangGraph multi-agent flow returns file:line citations and highlights nodes; injection blocked |
-| **B6** | API routes (repos, graph, ask) + background indexing + injection guard | PENDING | |
+| **B6** | API routes (repos, graph, ask) + background indexing + injection guard | DONE | Background indexing, status tracking, graph/node/impact routes, cited ask API & injection guard verified |
 | **B7** | Backend tests (api, guardrails, impact) + backend README | PENDING | |
 | **F0** | Frontend Scaffold (Vite React TS, deps, tokens.css, config.ts, api.ts, mock graph) | PENDING | |
 | **F1** | Motion engine (ticker, lenis, spring, scrollTrigger, textReveal, stack) | PENDING | |

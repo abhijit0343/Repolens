@@ -50,7 +50,7 @@ def create_repo_record(
         with conn:
             conn.execute(
                 """
-                INSERT INTO repos (repo_id, url, status, current_step, progress, created_at, updated_at)
+                INSERT OR REPLACE INTO repos (repo_id, url, status, current_step, progress, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 (repo_id, url, status, "queued", 0.0, now, now),
