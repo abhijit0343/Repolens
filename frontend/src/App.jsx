@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Masthead } from './components/Masthead.jsx';
 import { Loader } from './sections/Loader.jsx';
 import { Hero } from './sections/Hero.jsx';
+import { GraphSoFar } from './sections/GraphSoFar.jsx';
 import { Banner } from './components/Banner.jsx';
 import { initLenis, destroyLenis } from './lib/lenis.js';
 import { StackManager } from './lib/stack.js';
@@ -59,6 +60,7 @@ export function App() {
       {/* Stacked Sections Container */}
       <main ref={stackContainerRef} className="relative w-full">
         <Hero />
+        <GraphSoFar />
       </main>
     </div>
   );

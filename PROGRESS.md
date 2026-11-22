@@ -16,7 +16,7 @@
 | **F2** | Loader + Masthead + static Hero layout + BracketPanels + CTA + responsive bands | DONE | 3-beat loader, Masthead with hamburger, Hero with BracketPanels and CTA verified |
 | **F3** | three/tier.js + HeroScene part 1 (contours, 3D node cloud, parallax, fallback) | DONE | Tier GPU detector, 4-sine contour canvas, 3D node cloud with parallax and SVG fallback verified |
 | **F4** | HeroScene part 2 (code shell, burn dissolve, reveal trail, banded backdrop shadow, wave) | DONE | Code Shell (icosahedron + rings), crown-to-chin burn shader, 3.1s wave & mobile bypass verified |
-| **F5** | GraphSoFar (ChequerDissolve, HalftoneMap, TraversalTrace, StatsPlate) | PENDING | |
+| **F5** | GraphSoFar (ChequerDissolve, HalftoneMap, TraversalTrace, StatsPlate) | DONE | Chequer transition seam, Halftone density lattice, 6.0s TraversalTrace & StatsPlate verified |
 | **F6** | Pipeline timeline | PENDING | |
 | **F7** | Explorer part 1 (GraphScene + NodePanel + ContourCanvas + RepoBar) | PENDING | |
 | **F8** | Explorer part 2 (ChatDock + GuardrailBadge + impact view + indexing strip + API wire) | PENDING | |
