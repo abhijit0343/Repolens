@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { getDeviceTier, isWebGLAvailable } from './tier.js';
 import { readToken, readTokenColor } from './tokens.js';
 import { ContourCanvas } from './ContourCanvas.js';
+import { CodeShell } from './CodeShell.js';
 import ticker from '../lib/ticker.js';
 
 export class HeroScene {
@@ -16,10 +17,11 @@ export class HeroScene {
     this.tier = getDeviceTier();
     this.isReady = false;
 
-    this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+    this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0, trailX: 0, trailY: 0 };
     this.unsubscribeTicker = null;
 
     this._onMouseMove = this._onMouseMove.bind(this);
+    this._onScroll = this._onScroll.bind(this);
     this._onResize = this._onResize.bind(this);
     this._render = this._render.bind(this);
 
@@ -70,11 +72,28 @@ export class HeroScene {
       // 3. Build Point Cloud from Mock Graph or Procedural Topology
       await this.buildPointCloud();
 
-      // 4. Window & Mouse Listeners
+      // 4. Mount Code Shell (Wireframe + Solid Core + Rings)
+      this.codeShell = new CodeShell({ isMobile: this.tier.isMobile });
+      this.scene.add(this.codeShell.group);
+
+      // 5. Banded Backdrop Shadow Plane
+      const shadowGeo = new THREE.PlaneGeometry(16, 12);
+      const shadowMat = new THREE.MeshBasicMaterial({
+        color: readTokenColor('--surface-black', 0x1f2c23),
+        transparent: true,
+        opacity: 0.35,
+        depthWrite: false
+      });
+      this.shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
+      this.shadowPlane.position.z = -3;
+      this.scene.add(this.shadowPlane);
+
+      // 6. Window & Mouse Listeners
       window.addEventListener('mousemove', this._onMouseMove, { passive: true });
+      window.addEventListener('scroll', this._onScroll, { passive: true });
       window.addEventListener('resize', this._onResize, { passive: true });
 
-      // 5. Connect to shared RAF Ticker
+      // 7. Connect to shared RAF Ticker
       this.unsubscribeTicker = ticker.add(this._render);
       this.isReady = true;
     } catch (err) {
@@ -155,6 +174,15 @@ export class HeroScene {
     this.mouse.targetY = ny * 0.5;
   }
 
+  _onScroll() {
+    if (typeof window === 'undefined') return;
+    const vh = window.innerHeight || 800;
+    const progress = Math.min(Math.max(window.scrollY / vh, 0), 1);
+    if (this.codeShell) {
+      this.codeShell.setDissolve(progress);
+    }
+  }
+
   _onResize() {
     if (!this.container || !this.renderer || !this.camera) return;
     const width = this.container.clientWidth || window.innerWidth;
@@ -177,9 +205,11 @@ export class HeroScene {
       this.contour.render(time);
     }
 
-    // Smooth cursor drift & depth parallax
+    // Smooth cursor drift & liquid-mask reveal trail
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05;
     this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.05;
+    this.mouse.trailX += (this.mouse.targetX - this.mouse.trailX) * 0.02;
+    this.mouse.trailY += (this.mouse.targetY - this.mouse.trailY) * 0.02;
 
     this.camera.position.x = this.mouse.x * 1.5;
     this.camera.position.y = this.mouse.y * 1.0;
@@ -189,6 +219,11 @@ export class HeroScene {
     if (this.pointCloud) {
       this.pointCloud.rotation.y = time * 0.04;
       this.pointCloud.rotation.x = Math.sin(time * 0.03) * 0.1;
+    }
+
+    // Update Code Shell (rotation, 3.1s pulse wave, dissolution)
+    if (this.codeShell) {
+      this.codeShell.update(time);
     }
 
     this.renderer.render(this.scene, this.camera);
@@ -218,8 +253,18 @@ export class HeroScene {
       this.unsubscribeTicker = null;
     }
     window.removeEventListener('mousemove', this._onMouseMove);
+    window.removeEventListener('scroll', this._onScroll);
     window.removeEventListener('resize', this._onResize);
 
+    if (this.codeShell) {
+      this.codeShell.dispose();
+      this.scene?.remove(this.codeShell.group);
+    }
+    if (this.shadowPlane) {
+      this.shadowPlane.geometry.dispose();
+      this.shadowPlane.material.dispose();
+      this.scene?.remove(this.shadowPlane);
+    }
     if (this.pointCloud) {
       this.pointCloud.geometry.dispose();
       this.pointCloud.material.dispose();
