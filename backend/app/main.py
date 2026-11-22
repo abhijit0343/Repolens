@@ -1,4 +1,15 @@
 """FastAPI entry point for RepoLens backend."""
+import sys
+from pathlib import Path
+
+# Ensure project root is in sys.path so "backend.app..." imports resolve from any CWD
+_root = str(Path(__file__).resolve().parent.parent.parent)
+_backend = str(Path(__file__).resolve().parent.parent)
+if _root not in sys.path:
+    sys.path.insert(0, _root)
+if _backend not in sys.path:
+    sys.path.insert(0, _backend)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
