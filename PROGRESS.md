@@ -6,7 +6,7 @@
 | **B0** | Backend Scaffold (venv, requirements, config.py, main.py, GET /health) | DONE | FastAPI app boots, Uvicorn responds to /health with status 200 |
 | **B1** | llm.py, db/repos.py, guardrails repo.py + secrets.py + tests | DONE | Gemini LLM/embeddings wired, SQLite repo tracking active, pytest green on guardrails |
 | **B2** | Ingest (clone.py, scan.py, parse.py with tree-sitter Python & JS/TS) | DONE | Shallow git clone with secure token handling, multi-language scan & AST parser verified |
-| **B3** | Code graph (builder, communities, summarize, store) + Chroma embed/retriever | PENDING | |
+| **B3** | Code graph (builder, communities, summarize, store) + Chroma embed/retriever | DONE | Louvain communities, 3D spring layout, JSON schema validation and Chroma vectorstore verified |
 | **B4** | impact.py + tools (code_search, graph_search, impact_analysis, read_file, web_search) | PENDING | |
 | **B5** | Multi-agent workflow (planner, code_searcher, graph_analyst, web_docs, critic) + StateGraph | PENDING | |
 | **B6** | API routes (repos, graph, ask) + background indexing + injection guard | PENDING | |
