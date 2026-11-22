@@ -3,8 +3,8 @@
 | Phase | Description | Status | Notes |
 |-------|-------------|--------|-------|
 | **P0** | Inspection & Repository Initialization | DONE | Inspected tree, verified docs, appended missing env keys, git initialized |
-| **B0** | Backend Scaffold (venv, requirements, config.py, main.py, GET /health) | PENDING | |
-| **B1** | llm.py, db/repos.py, guardrails repo.py + secrets.py + tests | PENDING | |
+| **B0** | Backend Scaffold (venv, requirements, config.py, main.py, GET /health) | DONE | FastAPI app boots, Uvicorn responds to /health with status 200 |
+| **B1** | llm.py, db/repos.py, guardrails repo.py + secrets.py + tests | DONE | Gemini LLM/embeddings wired, SQLite repo tracking active, pytest green on guardrails |
 | **B2** | Ingest (clone.py, scan.py, parse.py with tree-sitter Python & JS/TS) | PENDING | |
 | **B3** | Code graph (builder, communities, summarize, store) + Chroma embed/retriever | PENDING | |
 | **B4** | impact.py + tools (code_search, graph_search, impact_analysis, read_file, web_search) | PENDING | |
