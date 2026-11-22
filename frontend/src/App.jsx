@@ -3,6 +3,7 @@ import { Masthead } from './components/Masthead.jsx';
 import { Loader } from './sections/Loader.jsx';
 import { Hero } from './sections/Hero.jsx';
 import { GraphSoFar } from './sections/GraphSoFar.jsx';
+import { Pipeline } from './sections/Pipeline.jsx';
 import { Banner } from './components/Banner.jsx';
 import { initLenis, destroyLenis } from './lib/lenis.js';
 import { StackManager } from './lib/stack.js';
@@ -61,6 +62,7 @@ export function App() {
       <main ref={stackContainerRef} className="relative w-full">
         <Hero />
         <GraphSoFar />
+        <Pipeline />
       </main>
     </div>
   );
