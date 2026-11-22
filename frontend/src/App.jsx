@@ -4,6 +4,7 @@ import { Loader } from './sections/Loader.jsx';
 import { Hero } from './sections/Hero.jsx';
 import { GraphSoFar } from './sections/GraphSoFar.jsx';
 import { Pipeline } from './sections/Pipeline.jsx';
+import { Explorer } from './sections/Explorer.jsx';
 import { Banner } from './components/Banner.jsx';
 import { initLenis, destroyLenis } from './lib/lenis.js';
 import { StackManager } from './lib/stack.js';
@@ -63,6 +64,7 @@ export function App() {
         <Hero />
         <GraphSoFar />
         <Pipeline />
+        <Explorer />
       </main>
     </div>
   );

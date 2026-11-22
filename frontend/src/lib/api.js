@@ -95,3 +95,18 @@ export async function askQuestion(repoId, question) {
   }
   return res.json();
 }
+
+export const api = {
+  indexRepo,
+  getRepoStatus,
+  getRepoGraph,
+  getGraph: getRepoGraph,
+  getNodeDetails,
+  getNode: getNodeDetails,
+  getSymbolImpact,
+  getImpact: getSymbolImpact,
+  askQuestion,
+  ask: askQuestion,
+};
+
+export default api;

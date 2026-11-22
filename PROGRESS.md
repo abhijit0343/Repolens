@@ -18,6 +18,6 @@
 | **F4** | HeroScene part 2 (code shell, burn dissolve, reveal trail, banded backdrop shadow, wave) | DONE | Code Shell (icosahedron + rings), crown-to-chin burn shader, 3.1s wave & mobile bypass verified |
 | **F5** | GraphSoFar (ChequerDissolve, HalftoneMap, TraversalTrace, StatsPlate) | DONE | Chequer transition seam, Halftone density lattice, 6.0s TraversalTrace & StatsPlate verified |
 | **F6** | Pipeline timeline | DONE | 5-stage timeline, dynamic progress rail, turning markers & letter reveals verified |
-| **F7** | Explorer part 1 (GraphScene + NodePanel + ContourCanvas + RepoBar) | PENDING | |
+| **F7** | Explorer part 1 (GraphScene + NodePanel + ContourCanvas + RepoBar) | DONE | Full 3D GraphScene, instanced nodes/edges, raycaster, NodePanel & RepoBar verified |
 | **F8** | Explorer part 2 (ChatDock + GuardrailBadge + impact view + indexing strip + API wire) | PENDING | |
 | **F9** | Footer + App assembly + a11y + performance pass + documentation | PENDING | |
