@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { CONTENT } from '../data/content.js';
 import { BracketPanel } from '../components/BracketPanel.jsx';
+import { HeroScene } from '../three/HeroScene.js';
 
 /**
  * RepoLens — Hero Section
  * Hosts title typography, technical telemetry bracket panels, CTA button, and 3D canvas backdrop.
  */
-export function Hero({ onExploreClick, canvasRef }) {
+export function Hero({ onExploreClick }) {
   const { hero } = CONTENT;
+  const canvasContainerRef = useRef(null);
+
+  useEffect(() => {
+    let scene = null;
+    if (canvasContainerRef.current) {
+      scene = new HeroScene(canvasContainerRef.current);
+    }
+    return () => {
+      if (scene) scene.destroy();
+    };
+  }, []);
 
   const handleCta = () => {
     if (onExploreClick) {
@@ -26,7 +38,7 @@ export function Hero({ onExploreClick, canvasRef }) {
     >
       {/* 3D WebGL Canvas Layer */}
       <div
-        ref={canvasRef}
+        ref={canvasContainerRef}
         className="absolute inset-0 pointer-events-auto z-0 opacity-80"
         aria-hidden="true"
       />

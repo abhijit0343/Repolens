@@ -14,7 +14,7 @@
 | **F0** | Frontend Scaffold (Vite React JSX, deps, tokens.css, config.js, api.js, mock graph) | DONE | Vite React JSX scaffold verified with production build and 60-node mock graph |
 | **F1** | Motion engine (ticker, lenis, spring, scrollTrigger, textReveal, stack) | DONE | Full motion engine in JS verified: spring physics, RAF ticker, scroll trigger, text reveal, stack recession |
 | **F2** | Loader + Masthead + static Hero layout + BracketPanels + CTA + responsive bands | DONE | 3-beat loader, Masthead with hamburger, Hero with BracketPanels and CTA verified |
-| **F3** | three/tier.ts + HeroScene part 1 (contours, 3D node cloud, parallax, fallback) | PENDING | |
+| **F3** | three/tier.js + HeroScene part 1 (contours, 3D node cloud, parallax, fallback) | DONE | Tier GPU detector, 4-sine contour canvas, 3D node cloud with parallax and SVG fallback verified |
 | **F4** | HeroScene part 2 (code shell, burn dissolve, reveal trail, banded backdrop shadow, wave) | PENDING | |
 | **F5** | GraphSoFar (ChequerDissolve, HalftoneMap, TraversalTrace, StatsPlate) | PENDING | |
 | **F6** | Pipeline timeline | PENDING | |
