@@ -9,18 +9,13 @@ from backend.app.api.graph import router as graph_router
 from backend.app.api.ask import router as ask_router
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Application lifespan context: initialize database and clean storage."""
-    init_db(settings.sqlite_path)
-    yield
-
+# Initialize database on startup
+init_db(settings.sqlite_path)
 
 app = FastAPI(
     title="RepoLens API",
     description="Deep agent codebase exploration with GraphRAG and cited answers",
     version="1.0.0",
-    lifespan=lifespan,
 )
 
 # Configure CORS
@@ -39,7 +34,7 @@ app.include_router(ask_router)
 
 
 @app.get("/health", tags=["system"])
-async def health_check():
+def health_check():
     """Health check endpoint to verify backend operational status."""
     return {
         "status": "healthy",

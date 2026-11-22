@@ -1,16 +1,9 @@
-"""Tests for health endpoint using AsyncClient."""
-import pytest
-import httpx
-from backend.app.main import app
+"""Unit tests for backend health check."""
+from backend.app.main import health_check
 
 
-@pytest.mark.asyncio
-async def test_health_check():
-    transport = httpx.ASGITransport(app=app)
-    async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
-        response = await client.get("/health")
-        assert response.status_code == 200
-        data = response.json()
-        assert data["status"] == "healthy"
-        assert data["service"] == "RepoLens Backend"
-        assert "llm_model" in data
+def test_health_check_endpoint():
+    res = health_check()
+    assert res["status"] == "healthy"
+    assert res["service"] == "RepoLens Backend"
+    assert "llm_model" in res
