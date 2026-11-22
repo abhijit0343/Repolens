@@ -53,10 +53,14 @@
 
   /* Node Lightness & Glow Hierarchy */
   --node-file: #f8f5ea;
-  --node-class: #dbe4d0;
-  --node-function: #a9bd9a;
-  --node-module: #6b8a6e;
-  --node-import: #557259;
+  --node-class: #6b8a6e;
+  --node-function: #3f5744;
+  --node-module: #c3d1b5;
+  --node-import: #a9bd9a;
+  --edge-contains: rgba(44, 62, 49, 0.30);
+  --edge-calls: rgba(107, 138, 110, 0.45);
+  --edge-imports: rgba(169, 189, 154, 0.40);
+  --edge-inherits: rgba(63, 87, 68, 0.50);
   --impact-upstream: #ffffff;
   --impact-downstream: #dbe4d0;
 

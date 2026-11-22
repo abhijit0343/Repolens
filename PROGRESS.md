@@ -12,7 +12,7 @@
 | **B6** | API routes (repos, graph, ask) + background indexing + injection guard | DONE | Background indexing, status tracking, graph/node/impact routes, cited ask API & injection guard verified |
 | **B7** | Backend tests (api, guardrails, impact) + backend README | DONE | 100% pytest green across API endpoints, impact ripple effects, and security guardrails |
 | **F0** | Frontend Scaffold (Vite React JSX, deps, tokens.css, config.js, api.js, mock graph) | DONE | Vite React JSX scaffold verified with production build and 60-node mock graph |
-| **F1** | Motion engine (ticker, lenis, spring, scrollTrigger, textReveal, stack) | PENDING | |
+| **F1** | Motion engine (ticker, lenis, spring, scrollTrigger, textReveal, stack) | DONE | Full motion engine in JS verified: spring physics, RAF ticker, scroll trigger, text reveal, stack recession |
 | **F2** | Loader + Masthead + static Hero layout + BracketPanels + CTA + responsive bands | PENDING | |
 | **F3** | three/tier.ts + HeroScene part 1 (contours, 3D node cloud, parallax, fallback) | PENDING | |
 | **F4** | HeroScene part 2 (code shell, burn dissolve, reveal trail, banded backdrop shadow, wave) | PENDING | |
